@@ -1,0 +1,293 @@
+{
+  "main": {
+    "id": "9ac8a4a60a35c8bb",
+    "type": "split",
+    "children": [
+      {
+        "id": "19630d828bffedab",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "ee326a7c20f5adc6",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02 - Regras de Negócio.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "02 - Regras de Negócio"
+            }
+          },
+          {
+            "id": "a5b84c370a651b5f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "02 - Regras de Negócio.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "02 - Regras de Negócio"
+            }
+          },
+          {
+            "id": "8d9bbed6d8817e73",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "04 - Casos de Uso.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "04 - Casos de Uso"
+            }
+          },
+          {
+            "id": "16f8475a711e662f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "05 - Decisões Arquiteturais.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "05 - Decisões Arquiteturais"
+            }
+          },
+          {
+            "id": "6d2cd108677b64f2",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "05 - Decisões Arquiteturais.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "05 - Decisões Arquiteturais"
+            }
+          },
+          {
+            "id": "901377dc87195717",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "_01 - Anotações iniciais do projeto.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "_01 - Anotações iniciais do projeto"
+            }
+          },
+          {
+            "id": "2d63ecaa06a95976",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "_diagrams/PDE-UC-Modulo01_02.svg"
+              },
+              "icon": "lucide-image",
+              "title": "PDE-UC-Modulo01_02"
+            }
+          }
+        ],
+        "currentTab": 6
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e05d797ba4e59058",
+    "type": "split",
+    "children": [
+      {
+        "id": "b6190b0cffd2715d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "6c3c1268c96322ba",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Explorador de arquivos"
+            }
+          },
+          {
+            "id": "8a33c969a072ce09",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Procurar"
+            }
+          },
+          {
+            "id": "88669e4b4d5fae78",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Marcadores"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b7c941f5f7f8e629",
+    "type": "split",
+    "children": [
+      {
+        "id": "49f10d9bf2692cb3",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "feadb7359a3a8b80",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "_diagrams/PDE-UC-Modulo01_02.svg",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Links inversos"
+            }
+          },
+          {
+            "id": "854bdccc4705c793",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "_diagrams/PDE-UC-Modulo01_02.svg",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Links de saída"
+            }
+          },
+          {
+            "id": "f0ae4b0c33c48f6a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Etiquetas"
+            }
+          },
+          {
+            "id": "e89a65a8bea50a83",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "Todas as propriedades"
+            }
+          },
+          {
+            "id": "74ad38698ca60df1",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "_diagrams/PDE-UC-Modulo01_02.svg",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Sumário"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Abrir a troca rápida": false,
+      "graph:Abrir visualização em gráfico": false,
+      "canvas:Criar novo canvas": false,
+      "daily-notes:Abrir a nota de hoje": false,
+      "templates:Inserir modelo": false,
+      "command-palette:Abrir paleta de comandos": false,
+      "bases:Criar nova base": false
+    }
+  },
+  "active": "6c3c1268c96322ba",
+  "lastOpenFiles": [
+    "01 - Convenções, termos e abreviações.md",
+    "_diagrams/PDE-UC-Modulo01_02.svg",
+    "_refs/CivEdit.png",
+    "_refs/LeoTec_nobg.png",
+    "_01 - Anotações iniciais do projeto.md",
+    "00 - Sumário.md",
+    "_00 Conversa com Cliente (Chatgpt - Versão editada).md",
+    "_refs",
+    "05 - Decisões Arquiteturais.md",
+    "04 - Casos de Uso.md",
+    "03 - Requisitos Não funcionais.md",
+    "02 - Regras de Negócio.md",
+    "Sem título.canvas",
+    "_diagrams",
+    "planning",
+    "Bem-vindo.md"
+  ]
+}
