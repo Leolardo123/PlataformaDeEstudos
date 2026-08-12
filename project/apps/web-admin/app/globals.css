@@ -1,7 +1,40 @@
+@import "tailwindcss";
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+
 }
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@theme {
+  --color-tone-1: #8F21ED;
+  --color-tone-2: #813FBA;
+  --color-tone-3: #6A4987;
+  --color-tone-4: #4A3E54;
+  --color-tone-5: #302C33;
+}
+
+:root, [data-theme='dark'] {
+  --font-muted: oklch(70% .025 300);
+  --font-sidebar: var(--color-purple-300);
+  --color-sidebar: var(--color-tone-4);
+  --color-content: var(--color-tone-5);
+}
+
+[data-theme='light'] {
+  --font-muted: oklch(46.351% 0.01801 298.089);
+  --font-sidebar: var(--color-purple-900);
+  --color-sidebar: var(--color-tone-1);
+  --color-content: var(--color-tone-2);
+}
+
 
 @media (prefers-color-scheme: dark) {
   :root {
@@ -10,41 +43,8 @@
   }
 }
 
-html,
 body {
-  max-width: 100vw;
-  overflow-x: hidden;
-}
-
-body {
-  color: var(--foreground);
   background: var(--background);
-}
-
-* {
-  box-sizing: border-box;
-  padding: 0;
-  margin: 0;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.imgDark {
-  display: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-
-  .imgLight {
-    display: none;
-  }
-  .imgDark {
-    display: unset;
-  }
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
 }
