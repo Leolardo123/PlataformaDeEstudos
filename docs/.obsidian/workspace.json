@@ -95,12 +95,14 @@
             "id": "2d63ecaa06a95976",
             "type": "leaf",
             "state": {
-              "type": "image",
+              "type": "markdown",
               "state": {
-                "file": "_diagrams/PDE-UC-Modulo01_02.svg"
+                "file": "04 - Casos de Uso.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-image",
-              "title": "PDE-UC-Modulo01_02"
+              "icon": "lucide-file",
+              "title": "04 - Casos de Uso"
             }
           }
         ],
@@ -271,20 +273,21 @@
       "bases:Criar nova base": false
     }
   },
-  "active": "6c3c1268c96322ba",
+  "active": "2d63ecaa06a95976",
   "lastOpenFiles": [
+    "03 - Requisitos Não funcionais.md",
+    "02 - Regras de Negócio.md",
     "01 - Convenções, termos e abreviações.md",
+    "00 - Sumário.md",
+    "_01 - Anotações iniciais do projeto.md",
+    "_00 - Conversa com Cliente (Chatgpt - Versão editada).md",
+    "04 - Casos de Uso.md",
     "_diagrams/PDE-UC-Modulo01_02.svg",
     "_refs/CivEdit.png",
     "_refs/LeoTec_nobg.png",
-    "_01 - Anotações iniciais do projeto.md",
-    "00 - Sumário.md",
     "_00 Conversa com Cliente (Chatgpt - Versão editada).md",
     "_refs",
     "05 - Decisões Arquiteturais.md",
-    "04 - Casos de Uso.md",
-    "03 - Requisitos Não funcionais.md",
-    "02 - Regras de Negócio.md",
     "Sem título.canvas",
     "_diagrams",
     "planning",

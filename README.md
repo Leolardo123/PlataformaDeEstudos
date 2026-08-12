@@ -1,15 +1,65 @@
-## Proposta
+# 📚 Sistema de Gerenciamento de Estudos (Monorepo)
 
-A proposta real principal do projeto é desenvolver um sistema para gerenciamento de estudos para uma empresa cujo público principal são os concurseiros.
+A proposta principal deste projeto é desenvolver um ecossistema robusto para o gerenciamento de estudos focado em **concurseiros**. 
 
-No geral foram desenvolvidas as idéias usando um cliente ficticio, para aproximar o projeto de um caso real, para isso todo o chat, documentação está disponibilizado
-na seçao de ``docs`` deste repositório, que é um 'cofre' feito com o software 'obsidian'.
+Para aproximar o projeto de um cenário real, todo o levantamento de requisitos, histórico de decisões e regras de negócio foram baseados em um cliente fictício. Essa documentação completa está centralizada na pasta `docs`, estruturada como um "cofre" do **Obsidian**.
 
-Inicialmente o projeto era uma proposta para micro-serviços em java springboot, porém para agilizar foi reduzido para monorepo com next-fastify-nestjs, que no momento
-em que foram decididas, representam uma melhor opção para que o projeto flua com maior facilidade por manter a stack inteira com o javascript/typescript.
+---
 
-Algumas das principais referêcias para as ideias de implementação do projeto são:
-- Qconcursos
-- Trello
-- Notion
-- Duolingo
+## 🎯 Contexto e Evolução Tecnológica
+
+Inicialmente, o projeto foi idealizado utilizando uma arquitetura de microserviços com Java Spring Boot. No entanto, para acelerar a entrega e unificar a stack de desenvolvimento em JavaScript/TypeScript, a arquitetura foi migrada para um **Monorepo** utilizando **Turborepo** e **pnpm**.
+
+Essa mudança permitiu maior velocidade no compartilhamento de código (como tipagens e lógica de validação) entre o ecossistema frontend e backend.
+
+### 💡 Principais Referências de Produto
+O design das funcionalidades e a experiência do usuário combinam as melhores práticas de plataformas de mercado:
+* **Qconcursos:** Dinâmica de resolução de questões e simulados.
+* **Trello & Notion:** Organização visual de cronogramas e anotações personalizadas.
+* **Duolingo:** Gamificação para engajamento e constância diária nos estudos.
+
+---
+
+## 🏗️ Estrutura de Pastas
+
+O repositório é gerenciado através do **Turborepo** com **pnpm Workspaces**, dividindo as responsabilidades de forma clara:
+
+```text
+├── apps/
+│   ├── web-student/       # Aplicação Frontend Para o Aluno Acessar os Conteúdos e se Organizar
+│   ├── web-admin/         # Aplicação Frontend Para Gerenciar Conteúdos e Alunos
+│   └── api/               # Backend / API RESTful (NestJS)
+│
+├── packages/
+│   ├── ui/                # Componentes de interface compartilhados (Design System)
+│   ├── typescript-config/ # Configurações globais do TypeScript
+│   └── eslint-config/     # Regras de padronização de código
+│
+├── turbo.json             # Pipeline de builds e cache do Turborepo
+├── pnpm-workspace.yaml    # Configuração dos workspaces do pnpm
+└── README.md              # Documentação principal do projeto
+```
+
+---
+
+## 🛠️ Tecnologias Utilizadas
+
+* **Monorepo:** Turborepo, pnpm Workspaces
+* **Frontend:** Next.js, TypeScript, TailwindCSS
+* **Backend:** NestJS, TypeScript, Fastify
+* **Documentação:** Obsidian
+
+---
+
+## 🚀 Como Executar o Projeto
+
+1. **Instalar Dependências** (Rode sempre na raiz do projeto):
+   ```bash
+   pnpm install
+   ```
+
+2. **Executar em Modo de Desenvolvimento**:
+   ```bash
+   pnpm dev
+   ```
+   *Este comando iniciará todos os aplicativos (`web`, `docs` e `api`) em paralelo de forma inteligente utilizando o cache do Turbo.*
