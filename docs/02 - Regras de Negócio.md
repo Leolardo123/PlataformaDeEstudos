@@ -281,3 +281,344 @@ No dashboard do usuário administrador devem ser exibidas as seguintes métricas
 - Quantidade total de conteúdos cadastrados;
     
 - Quantidade total de flashcards cadastrados.
+
+Administração
+
+# RN-036 – Acesso Administrativo
+
+Somente usuários com perfil de administrador poderão acessar o painel administrativo e realizar operações de cadastro, alteração ou remoção de dados pedagógicos.
+
+
+# RN-037 – Identificação do Cadastro
+
+Todo registro pedagógico deverá possuir:
+
+Identificador único;
+Data de criação;
+Data de atualização;
+Status do registro.
+
+# RN-038 – Exclusão de Registros
+
+Registros pedagógicos que possuam associação com histórico de alunos não deverão ser excluídos fisicamente.
+
+Nesses casos, o registro deverá ser desativado ou arquivado, preservando seus dados para consulta histórica.
+
+
+# RN-039 – Auditoria Administrativa
+
+Alterações realizadas em dados pedagógicos deverão registrar:
+
+Administrador responsável;
+Data e hora;
+Registro alterado;
+Operação realizada.
+Edital
+
+# RN-040 – Estrutura do Edital
+
+Um edital deverá possuir, no mínimo:
+
+Nome;
+Órgão;
+Cargo;
+Descrição;
+Data de publicação;
+Status;
+Matérias associadas.
+
+# RN-041 – Status do Edital
+
+Um edital poderá possuir os seguintes estados:
+
+Rascunho;
+Publicado;
+Arquivado.
+
+Somente editais publicados poderão ser utilizados pelos alunos para geração de cronogramas.
+
+# RN-042 – Associação de Matérias ao Edital
+
+Um edital deverá permitir a associação de múltiplas matérias.
+
+A associação deverá permitir definir:
+
+Matéria;
+Ordem de exibição;
+Tópicos pertencentes ao edital.
+
+# RN-043 – Seleção de Tópicos do Edital
+
+Ao associar uma matéria a um edital, o administrador poderá selecionar quais tópicos da matéria farão parte daquele edital.
+
+A seleção não deverá alterar a estrutura original da matéria.
+
+
+# RN-044 – Ordem das Matérias
+
+A ordem das matérias dentro de um edital deverá ser definida pelo administrador.
+
+A alteração dessa ordem não deverá alterar a ordem da matéria em outros editais.
+
+# RN-053 – Estrutura do Conteúdo
+
+Um conteúdo deverá possuir:
+
+Título;
+Tópico;
+Tipo;
+Descrição;
+Status;
+Ordem;
+Data de criação;
+Data de atualização.
+
+# RN-054 – Tipos de Conteúdo
+
+Na primeira versão, os conteúdos poderão possuir os seguintes tipos:
+
+Texto;
+PDF;
+Vídeo;
+Link.
+
+# RN-055 – Conteúdo Escrito
+
+Conteúdos do tipo texto deverão possuir um corpo textual persistido pelo sistema.
+
+
+# RN-056 – Conteúdo Externo
+
+Conteúdos do tipo vídeo ou link deverão possuir uma URL válida.
+
+
+# RN-057 – Arquivo
+
+Conteúdos do tipo PDF deverão possuir um arquivo associado.
+
+
+# RN-058 – Ordem dos Conteúdos
+
+Um tópico poderá possuir múltiplos conteúdos.
+
+Cada conteúdo deverá possuir uma posição explícita para determinar sua ordem de apresentação.
+
+
+# RN-059 – Publicação do Conteúdo
+
+Um conteúdo poderá possuir os estados:
+
+Rascunho;
+Publicado;
+Arquivado.
+
+Somente conteúdos publicados deverão ser apresentados aos alunos.
+
+Questões
+
+# RN-060 – Estrutura da Questão
+
+Uma questão deverá possuir:
+
+Enunciado;
+Tipo;
+Alternativas;
+Resposta correta;
+Explicação/comentário;
+Dificuldade;
+Status;
+Tópicos associados.
+
+# RN-061 – Tipo da Questão
+
+Na primeira versão, o sistema deverá suportar questões de múltipla escolha.
+
+A estrutura deverá permitir a inclusão futura de outros tipos.
+
+
+# RN-062 – Alternativas
+
+Uma questão de múltipla escolha deverá possuir pelo menos duas alternativas.
+
+Cada alternativa deverá possuir:
+
+Texto;
+Identificador;
+Ordem;
+Indicador de resposta correta.
+
+# RN-063 – Resposta Correta
+
+Uma questão de múltipla escolha deverá possuir exatamente uma alternativa correta.
+
+
+# RN-064 – Explicação da Questão
+
+Uma questão poderá possuir uma explicação apresentada ao aluno após sua resolução.
+
+
+# RN-065 – Dificuldade
+
+Uma questão poderá possuir um nível de dificuldade:
+
+Fácil;
+Médio;
+Difícil.
+
+# RN-066 – Status da Questão
+
+Uma questão poderá possuir os estados:
+
+Rascunho;
+Publicada;
+Arquivada.
+
+Somente questões publicadas poderão ser utilizadas em tarefas.
+
+
+# RN-067 – Associação com Tópicos
+
+Uma questão poderá estar associada a múltiplos tópicos.
+
+Essa associação deverá ser armazenada separadamente da questão.
+
+
+# RN-068 – Questões Compartilhadas
+
+A associação de uma questão a um novo tópico não deverá criar uma cópia da questão.
+
+A mesma questão poderá ser utilizada em diferentes contextos pedagógicos.
+
+Flashcards
+
+# RN-069 – Estrutura do Flashcard
+
+Um flashcard deverá possuir:
+
+Frente;
+Verso;
+Tópico;
+Status;
+Data de criação;
+Data de atualização.
+
+# RN-070 – Status do Flashcard
+
+Um flashcard poderá possuir os estados:
+
+Rascunho;
+Publicado;
+Arquivado.
+
+Somente flashcards publicados poderão ser utilizados em revisões.
+
+
+# RN-071 – Associação com Tópico
+
+Cada flashcard deverá estar associado a um tópico.
+
+
+# RN-072 – Ordem dos Flashcards
+
+Flashcards poderão possuir uma ordem de apresentação dentro de um tópico.
+
+Cadastro e edição
+
+Essas regras vão evitar bastante inconsistência no painel administrativo.
+
+
+# RN-073 – Validação
+
+O sistema deverá validar os campos obrigatórios antes de permitir a criação ou atualização de registros.
+
+
+# RN-074 – Rascunho
+
+O administrador poderá salvar registros incompletos como rascunho quando permitido pelo tipo de entidade.
+
+
+# RN-075 – Publicação
+
+Um registro somente poderá ser publicado quando todos os dados obrigatórios estiverem preenchidos e válidos.
+
+
+# RN-076 – Alteração de Registro
+
+A alteração de um registro não deverá modificar seu identificador.
+
+
+# RN-077 – Preservação de Referências
+
+Registros utilizados por outras entidades não deverão ser removidos de maneira que provoque referências inválidas.
+
+Busca e listagem administrativa
+
+Isso provavelmente vai aparecer já nas primeiras telas.
+
+
+# RN-078 – Listagem
+
+O painel administrativo deverá disponibilizar listagens para:
+
+Editais;
+Matérias;
+Tópicos;
+Conteúdos;
+Questões;
+Flashcards.
+
+# RN-079 – Paginação
+
+Listagens administrativas deverão possuir paginação para evitar carregamento de grandes quantidades de registros simultaneamente.
+
+
+# RN-080 – Pesquisa
+
+As entidades administrativas deverão permitir pesquisa textual pelos principais campos identificadores.
+
+
+# RN-081 – Filtros
+
+As listagens deverão permitir filtros compatíveis com a entidade, incluindo:
+
+Status;
+Tipo;
+Matéria;
+Tópico;
+Dificuldade;
+Edital.
+
+# RN-082 – Ordenação
+
+As listagens deverão permitir ordenação pelos campos relevantes.
+
+Importação de questões
+
+Como você já tinha previsto importação em massa, eu colocaria isso agora na documentação, mesmo que você não implemente hoje.
+
+
+# RN-083 – Importação de Questões
+
+O administrador poderá importar questões em lote utilizando arquivo estruturado.
+
+
+# RN-084 – Validação da Importação
+
+Antes da persistência definitiva, o sistema deverá validar todos os registros importados.
+
+Registros inválidos deverão ser identificados e apresentados ao administrador.
+
+
+# RN-085 – Importação Atômica
+
+Na primeira versão, uma importação poderá ser realizada de forma que nenhum registro seja persistido caso existam erros de validação.
+
+
+# RN-086 – Relatório de Importação
+
+Após uma importação, o sistema deverá apresentar:
+
+Quantidade de registros processados;
+Quantidade de registros aceitos;
+Quantidade de registros rejeitados;
+Motivo dos erros.

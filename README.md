@@ -6,12 +6,6 @@ Para aproximar o projeto de um cenário real, todo o levantamento de requisitos,
 
 ---
 
-## 🎯 Contexto e Evolução Tecnológica
-
-Inicialmente, o projeto foi idealizado utilizando uma arquitetura de microserviços com Java Spring Boot. No entanto, para acelerar a entrega e unificar a stack de desenvolvimento em JavaScript/TypeScript, a arquitetura foi migrada para um **Monorepo** utilizando **Turborepo** e **pnpm**.
-
-Essa mudança permitiu maior velocidade no compartilhamento de código (como tipagens e lógica de validação) entre o ecossistema frontend e backend.
-
 ### 💡 Principais Referências de Produto
 O design das funcionalidades e a experiência do usuário combinam as melhores práticas de plataformas de mercado:
 * **Qconcursos:** Dinâmica de resolução de questões e simulados.
@@ -65,4 +59,4 @@ O repositório é gerenciado através do **Turborepo** com **pnpm Workspaces**, 
    ```bash
    pnpm dev
    ```
-   *Este comando iniciará todos os aplicativos (`web`, `docs` e `api`) em paralelo de forma inteligente utilizando o cache do Turbo.*
+   *Este comando iniciará todos os aplicativos dentro de project/apps em paralelo de forma inteligente utilizando o cache do Turbo.*
