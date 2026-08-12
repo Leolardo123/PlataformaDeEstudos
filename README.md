@@ -25,19 +25,22 @@ O design das funcionalidades e a experiência do usuário combinam as melhores p
 O repositório é gerenciado através do **Turborepo** com **pnpm Workspaces**, dividindo as responsabilidades de forma clara:
 
 ```text
-├── apps/
-│   ├── web-student/       # Aplicação Frontend Para o Aluno Acessar os Conteúdos e se Organizar
-│   ├── web-admin/         # Aplicação Frontend Para Gerenciar Conteúdos e Alunos
-│   └── api/               # Backend / API RESTful (NestJS)
-│
-├── packages/
-│   ├── ui/                # Componentes de interface compartilhados (Design System)
-│   ├── typescript-config/ # Configurações globais do TypeScript
-│   └── eslint-config/     # Regras de padronização de código
-│
-├── turbo.json             # Pipeline de builds e cache do Turborepo
-├── pnpm-workspace.yaml    # Configuração dos workspaces do pnpm
-└── README.md              # Documentação principal do projeto
+├── docs/ # Documentação, cofre feito com obsidian
+└── project/ # Local onde está instalado turborepo com o frontend e backend
+    │
+    ├── apps/
+    │   ├── web-student/       # Aplicação Frontend Para o Aluno Acessar os Conteúdos e se Organizar
+    │   ├── web-admin/         # Aplicação Frontend Para Gerenciar Conteúdos e Alunos
+    │   └── api/               # Backend / API RESTful (NestJS)
+    │
+    ├── packages/
+    │   ├── ui/                # Componentes de interface compartilhados (Design System)
+    │   ├── typescript-config/ # Configurações globais do TypeScript
+    │   └── eslint-config/     # Regras de padronização de código
+    │
+    ├── turbo.json             # Pipeline de builds e cache do Turborepo
+    ├── pnpm-workspace.yaml    # Configuração dos workspaces do pnpm
+    └── README.md              # Documentação principal do projeto
 ```
 
 ---
