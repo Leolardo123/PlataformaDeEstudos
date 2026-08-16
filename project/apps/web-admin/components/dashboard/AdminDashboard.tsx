@@ -4,10 +4,28 @@ import { useMemo, useState } from "react";
 
 type Period = "Dia" | "Semana" | "Mês";
 
-const chartData: Record<Period, { labels: string[]; values: number[]; total: string; comparison: string }> = {
-  Dia: { labels: ["08h", "10h", "12h", "14h", "16h", "18h", "20h"], values: [4, 7, 5, 12, 18, 16, 22], total: "46", comparison: "+12,2% em relação a ontem" },
-  Semana: { labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"], values: [32, 48, 41, 58, 73, 29, 33], total: "314", comparison: "+8,4% em relação à semana anterior" },
-  Mês: { labels: ["Sem. 1", "Sem. 2", "Sem. 3", "Sem. 4"], values: [256, 309, 287, 394], total: "1.246", comparison: "+18,6% em relação ao mês anterior" },
+const chartData: Record<
+  Period,
+  { labels: string[]; values: number[]; total: string; comparison: string }
+> = {
+  Dia: {
+    labels: ["08h", "10h", "12h", "14h", "16h", "18h", "20h"],
+    values: [4, 7, 5, 12, 18, 16, 22],
+    total: "46",
+    comparison: "+12,2% em relação a ontem",
+  },
+  Semana: {
+    labels: ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"],
+    values: [32, 48, 41, 58, 73, 29, 33],
+    total: "314",
+    comparison: "+8,4% em relação à semana anterior",
+  },
+  Mês: {
+    labels: ["Sem. 1", "Sem. 2", "Sem. 3", "Sem. 4"],
+    values: [256, 309, 287, 394],
+    total: "1.246",
+    comparison: "+18,6% em relação ao mês anterior",
+  },
 };
 
 const metrics = [

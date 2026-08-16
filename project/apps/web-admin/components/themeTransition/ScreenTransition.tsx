@@ -2,7 +2,6 @@
 
 import type { ReactNode } from 'react';
 import { motion } from 'motion/react';
-import { useTheme } from '@/hooks/useTheme';
 
 export default function ScreenTransition({ children }: { children: ReactNode }) {
   return (
