@@ -50,12 +50,14 @@ O repositório é gerenciado através do **Turborepo** com **pnpm Workspaces**, 
 
 ## 🚀 Como Executar o Projeto
 
-1. **Instalar Dependências** (Rode sempre na raiz do projeto):
+1. Acesse a pasta projects e abra o terminal.
+
+2. **Instalar Dependências**:
    ```bash
    pnpm install
    ```
 
-2. **Executar em Modo de Desenvolvimento**:
+3. **Executar em Modo de Desenvolvimento**:
    ```bash
    pnpm dev
    ```
