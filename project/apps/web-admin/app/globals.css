@@ -1,9 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-
+  --background: #f8f7fb;
+  --foreground: #24212a;
 }
 
 @theme inline {
@@ -22,29 +21,101 @@
 }
 
 :root, [data-theme='dark'] {
-  --font-muted: oklch(70% .025 300);
-  --font-sidebar: var(--color-purple-300);
-  --color-sidebar: var(--color-tone-4);
-  --color-content: var(--color-tone-5);
+  --background: #211d25;
+  --foreground: #f7f3fa;
+  --font-muted: #b9acbe;
+  --font-sidebar: #f2e9f6;
+  --color-sidebar: #312a37;
+  --color-content: #211d25;
+  --sidebar-border: rgba(255, 255, 255, .08);
+  --nav-hover: rgba(255, 255, 255, .08);
+  --theme-button: rgba(255, 255, 255, .07);
 }
 
 [data-theme='light'] {
-  --font-muted: oklch(46.351% 0.01801 298.089);
-  --font-sidebar: var(--color-purple-900);
-  --color-sidebar: var(--color-tone-1);
-  --color-content: var(--color-tone-2);
-}
-
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #faf9fc;
+  --foreground: #292331;
+  --font-muted: #796d7f;
+  --font-sidebar: #35263d;
+  --color-sidebar: #ffffff;
+  --color-content: #faf9fc;
+  --sidebar-border: #ede8f0;
+  --nav-hover: #f2eaf8;
+  --theme-button: #f5f1f7;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.admin-shell {
+  display: flex;
+  min-height: 100dvh;
+  background: var(--color-content);
+}
+
+.sidebar {
+  display: flex;
+  position: sticky;
+  top: 0;
+  width: 272px;
+  min-height: 100dvh;
+  flex-direction: column;
+  flex-shrink: 0;
+  padding: 28px 16px 18px;
+  color: var(--font-sidebar);
+  background: var(--color-sidebar);
+  border-right: 1px solid var(--sidebar-border);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 12px;
+  color: inherit;
+  font-size: 20px;
+  font-weight: 750;
+  letter-spacing: -.04em;
+  text-decoration: none;
+}
+
+.brand-mark {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  color: #fff;
+  font-size: 17px;
+  font-weight: 800;
+  background: #8f21ed;
+  border-radius: 9px;
+  box-shadow: 0 7px 16px rgba(143, 33, 237, .28);
+}
+
+.sidebar-nav { margin-top: 52px; }
+.nav-label { margin: 0 12px 10px; color: var(--font-muted); font-size: 10px; font-weight: 700; letter-spacing: .11em; text-transform: uppercase; }
+.sidebar-nav ul { display: grid; gap: 4px; padding: 0; margin: 0; list-style: none; }
+.nav-link { display: flex; align-items: center; gap: 13px; min-height: 45px; padding: 0 12px; color: inherit; border-radius: 9px; font-size: 14px; font-weight: 520; text-decoration: none; transition: background .18s ease, color .18s ease; }
+.nav-link:hover, .nav-link:focus-visible { color: inherit; outline: none; background: var(--nav-hover); }
+.nav-link svg { flex: 0 0 auto; opacity: .82; }
+
+.sidebar-footer { display: grid; gap: 18px; margin-top: auto; }
+.theme-toggle { display: flex; align-items: center; gap: 11px; width: 100%; min-height: 43px; padding: 0 12px; color: inherit; background: var(--theme-button); border: 1px solid var(--sidebar-border); border-radius: 9px; cursor: pointer; font: inherit; font-size: 13px; font-weight: 600; transition: background .18s ease, transform .18s ease; }
+.theme-toggle:hover { background: var(--nav-hover); transform: translateY(-1px); }
+.theme-icon { display: grid; width: 19px; place-items: center; font-size: 17px; }
+.account { display: flex; align-items: center; gap: 10px; padding: 0 8px; color: var(--font-muted); font-size: 13px; }
+.avatar { display: grid; width: 30px; height: 30px; place-items: center; color: #fff; background: #6a4987; border-radius: 50%; font-size: 12px; font-weight: 700; }
+
+.content-area { flex: 1; min-width: 0; }
+
+@media (max-width: 640px) {
+  .sidebar { width: 100%; min-height: auto; padding: 18px 14px; position: static; }
+  .admin-shell { display: block; }
+  .sidebar-nav { margin-top: 28px; }
+  .sidebar-nav ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .sidebar-footer { margin-top: 28px; }
+  .content-area { min-height: 20dvh; }
 }

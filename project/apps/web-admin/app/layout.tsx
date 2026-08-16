@@ -21,8 +21,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
-      lang="en"
-      data-theme="dark-theme"
+      lang="pt-BR"
+      data-theme="dark"
       className={cl(
         `${geistSans.variable} ${geistMono.variable} h-full antialiased`,
       )}

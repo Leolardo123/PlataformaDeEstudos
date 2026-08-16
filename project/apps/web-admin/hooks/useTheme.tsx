@@ -16,19 +16,17 @@ export function useTheme(defaultTheme: string = 'light') {
   });
 
   useEffect(() => {
-    // 1. Determine initial theme on mount
     const savedTheme = localStorage.getItem('app-theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
 
-    // 2. Set initial theme state and DOM attributes
-    setThemeState(initialTheme);
     document.documentElement.setAttribute('data-theme', initialTheme);
 
-    // 3. Listen for system OS theme changes dynamically
+    // Defer the client preference update until after hydration.
+    const themeSync = window.setTimeout(() => setThemeState(initialTheme), 0);
+
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
     const handleSystemChange = (e: MediaQueryListEvent) => {
-      // Only auto-update if the user hasn't explicitly locked in a preference override
       if (!localStorage.getItem('app-theme')) {
         const newSystemTheme = e.matches ? 'dark' : 'light';
         setThemeState(newSystemTheme);
@@ -37,10 +35,12 @@ export function useTheme(defaultTheme: string = 'light') {
     };
 
     mediaQuery.addEventListener('change', handleSystemChange);
-    return () => mediaQuery.removeEventListener('change', handleSystemChange);
+    return () => {
+      window.clearTimeout(themeSync);
+      mediaQuery.removeEventListener('change', handleSystemChange);
+    };
   }, []);
 
-  // 4. Exposed function to update theme from UI components
   const setTheme = (newTheme: string) => {
     setThemeState(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
