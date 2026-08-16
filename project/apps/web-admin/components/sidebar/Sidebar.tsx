@@ -5,27 +5,27 @@ import { useTheme } from "@/hooks/useTheme";
 const links = [
   {
     label: "Editais",
-    link: "#notices",
+    link: "/notices",
     icon: "document",
   },
   {
     label: "Matérias",
-    link: "#subjects",
+    link: "/subjects",
     icon: "book",
   },
   {
     label: "Tópicos",
-    link: "#topics",
+    link: "/topics",
     icon: "layers",
   },
   {
     label: "Questões",
-    link: "#questions",
+    link: "/questions",
     icon: "check",
   },
   {
     label: "Flashcards",
-    link: "#flashcards",
+    link: "/flashcards",
     icon: "cards",
   },
 ];

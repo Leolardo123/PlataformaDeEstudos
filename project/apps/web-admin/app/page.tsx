@@ -1,12 +1,7 @@
 'use client'
 
-import Sidebar from "@/components/sidebar/Sidebar";
+import { redirect } from "next/navigation";
 
 export default function Home() {
-  return (
-    <div className="admin-shell" id="top">
-      <Sidebar />
-      <main className="content-area" aria-label="Conteúdo principal" />
-    </div>
-  );
+  redirect("/notices");
 }
