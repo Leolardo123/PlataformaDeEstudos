@@ -6,7 +6,7 @@ type CatalogRow = {
   id: string;
   name: string;
   detail: string;
-  status: "Ativo" | "Rascunho";
+  status: string;
 };
 
 type CatalogTableProps = {
@@ -18,9 +18,9 @@ type CatalogTableProps = {
 
 export function CatalogTable({ entityName, entityNamePlural, detailLabel, rows }: CatalogTableProps) {
   const columns: TableColumn<CatalogRow>[] = [
-    { label: "Nome", render: (row) => <strong>{row.name}</strong> },
+    { label: "Nome", render: (row) => <strong className="font-semibold">{row.name}</strong> },
     { label: detailLabel, render: (row) => row.detail },
-    { label: "Status", render: (row) => <span className={`status-badge ${row.status === "Ativo" ? "active" : "draft"}`}>{row.status}</span> },
+    { label: "Status", render: (row) => <span className={row.status === "Ativo" ? "inline-flex rounded-full bg-[rgba(42,160,103,.13)] px-2 py-1 text-[11px] font-bold text-[#268053]" : "inline-flex rounded-full bg-[rgba(193,143,35,.14)] px-2 py-1 text-[11px] font-bold text-[#977123]"}>{row.status}</span> },
   ];
 
   return (

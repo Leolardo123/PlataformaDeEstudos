@@ -1,37 +1,40 @@
-'use client'
-import { useEffect, useState } from 'react';
+'use client';
 
-export function useTheme(defaultTheme: string = 'light') {
-  const themes = [
-    'dark',
-    'light'
-  ];
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
-  // Initialize state as null or default to prevent SSR hydration mismatches
-  const [theme, setThemeState] = useState<string>(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('app-theme') || defaultTheme;
-    }
-    return defaultTheme;
-  });
+type Theme = 'dark' | 'light';
+
+type ThemeContextValue = {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+};
+
+const ThemeContext = createContext<ThemeContextValue | null>(null);
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  // The default matches the theme rendered by the server to avoid hydration errors.
+  const [theme, setThemeState] = useState<Theme>('dark');
+
+  const applyTheme = (nextTheme: Theme, persist = true) => {
+    document.documentElement.setAttribute('data-theme', nextTheme);
+    setThemeState(nextTheme);
+    if (persist) localStorage.setItem('app-theme', nextTheme);
+  };
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('app-theme');
     const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const initialTheme = savedTheme || (systemPrefersDark ? 'dark' : 'light');
+    const initialTheme: Theme = savedTheme === 'dark' || savedTheme === 'light'
+      ? savedTheme
+      : systemPrefersDark ? 'dark' : 'light';
 
     document.documentElement.setAttribute('data-theme', initialTheme);
-
-    // Defer the client preference update until after hydration.
     const themeSync = window.setTimeout(() => setThemeState(initialTheme), 0);
 
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleSystemChange = (e: MediaQueryListEvent) => {
-      if (!localStorage.getItem('app-theme')) {
-        const newSystemTheme = e.matches ? 'dark' : 'light';
-        setThemeState(newSystemTheme);
-        document.documentElement.setAttribute('data-theme', newSystemTheme);
-      }
+    const handleSystemChange = (event: MediaQueryListEvent) => {
+      if (!localStorage.getItem('app-theme')) applyTheme(event.matches ? 'dark' : 'light', false);
     };
 
     mediaQuery.addEventListener('change', handleSystemChange);
@@ -41,26 +44,13 @@ export function useTheme(defaultTheme: string = 'light') {
     };
   }, []);
 
-  const setTheme = (newTheme: string) => {
-    setThemeState(newTheme);
-    document.documentElement.setAttribute('data-theme', newTheme);
-    localStorage.setItem('app-theme', newTheme);
-  };
+  const toggleTheme = () => applyTheme(theme === 'dark' ? 'light' : 'dark');
 
-  const toggleTheme = () => {
-    let themeIndex = themes.findIndex(t => t === theme);
+  return <ThemeContext.Provider value={{ theme, setTheme: applyTheme, toggleTheme }}>{children}</ThemeContext.Provider>;
+}
 
-    if (themeIndex<0) return;
-
-    themeIndex+=1;
-
-    if (themes[themeIndex]) {
-      setTheme(themes[themeIndex]);
-    } else {
-      setTheme(themes[0]);
-    }
-    
-  }
-
-  return { theme, setTheme, toggleTheme };
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error('useTheme deve ser usado dentro de ThemeProvider.');
+  return context;
 }

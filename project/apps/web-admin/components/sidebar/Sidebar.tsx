@@ -1,8 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { useTheme } from "@/hooks/useTheme";
 
 const links = [
+  {
+    label: "Dashboard",
+    link: "/dashboard",
+    icon: "home",
+  },
   {
     label: "Editais",
     link: "/notices",
@@ -43,6 +49,10 @@ function NavigationIcon({ name }: { name: string }) {
     "aria-hidden": true,
   };
 
+  if (name === "home") {
+    return <svg {...commonProps}><path d="M3 9.5 12 3l9 6.5v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-11Z" /><path d="M9 22V12h6v10" /></svg>;
+  }
+
   if (name === "book") {
     return <svg {...commonProps}><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" /><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" /></svg>;
   }
@@ -67,33 +77,33 @@ function Sidebar() {
   const nextThemeLabel = theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
 
   return (
-    <aside className="sidebar" aria-label="Navegação principal">
-      <a className="brand" href="#top" aria-label="PDE — início">
-        <span className="brand-mark">P</span>
+    <aside className="sticky top-0 flex h-dvh w-68 shrink-0 self-start flex-col overflow-y-auto border-r border-(--sidebar-border) bg-(--color-sidebar) px-4 pt-7 pb-4.5 text-(--font-sidebar) max-sm:static max-sm:h-auto max-sm:w-full max-sm:px-3.5 max-sm:py-4.5" aria-label="Navegação principal">
+      <a className="flex items-center gap-2.5 px-3 text-xl font-bold tracking-[-.04em]" href="#top" aria-label="PDE — início">
+        <span className="grid size-7.75 place-items-center rounded-[9px] bg-tone-1 text-[17px] font-extrabold text-white shadow-[0_7px_16px_rgba(143,33,237,.28)]">P</span>
         <span>PDE</span>
       </a>
 
-      <nav className="sidebar-nav">
-        <p className="nav-label">Gerenciamento</p>
-        <ul>
+      <nav className="mt-13 max-sm:mt-7">
+        <p className="mb-2.5 mx-3 text-[10px] font-bold uppercase tracking-[.11em] text-(--font-muted)">Gerenciamento</p>
+        <ul className="grid list-none gap-1 p-0 max-sm:grid-cols-2">
           {links.map((item) => (
             <li key={item.link}>
-              <a className="nav-link" href={item.link}>
+              <Link className="flex min-h-11.25 items-center gap-3.25 rounded-[9px] px-3 text-sm font-medium text-inherit transition-colors duration-200 hover:bg-(--nav-hover) focus-visible:bg-(--nav-hover) focus-visible:outline-none" href={item.link}>
                 <NavigationIcon name={item.icon} />
                 <span>{item.label}</span>
-              </a>
+              </Link>
             </li>
           ))}
         </ul>
       </nav>
 
-      <div className="sidebar-footer">
-        <button className="theme-toggle" onClick={toggleTheme} aria-label={nextThemeLabel} title={nextThemeLabel}>
-          <span className="theme-icon" aria-hidden="true">{theme === "dark" ? "☀" : "◐"}</span>
+      <div className="mt-auto grid gap-4.5 max-sm:mt-7">
+        <button className="flex min-h-10.75 w-full items-center gap-2.75 rounded-[9px] border border-(--sidebar-border) bg-(--theme-button) px-3 text-[13px] font-semibold hover:-translate-y-px hover:bg-(--nav-hover)" onClick={toggleTheme} aria-label={nextThemeLabel} title={nextThemeLabel}>
+          <span className="grid w-4.75 place-items-center text-[17px]" aria-hidden="true">{theme === "dark" ? "☀" : "◐"}</span>
           <span>{theme === "dark" ? "Tema claro" : "Tema escuro"}</span>
         </button>
-        <div className="account">
-          <span className="avatar" aria-hidden="true">A</span>
+        <div className="flex items-center gap-2.5 px-2 text-[13px] text-(--font-muted)">
+          <span className="grid size-7.5 place-items-center rounded-full bg-tone-3 text-xs font-bold text-white" aria-hidden="true">A</span>
           <span className="account-name">Administrador</span>
         </div>
       </div>
