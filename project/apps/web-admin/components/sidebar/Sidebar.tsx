@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useTheme } from "@/hooks/useTheme";
+import { useAuth } from "@/hooks/useAuth";
 
 const links = [
   {
@@ -74,6 +75,7 @@ function NavigationIcon({ name }: { name: string }) {
 
 function Sidebar() {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const nextThemeLabel = theme === "dark" ? "Ativar tema claro" : "Ativar tema escuro";
 
   return (
@@ -104,8 +106,9 @@ function Sidebar() {
         </button>
         <div className="flex items-center gap-2.5 px-2 text-[13px] text-(--font-muted)">
           <span className="grid size-7.5 place-items-center rounded-full bg-tone-3 text-xs font-bold text-white" aria-hidden="true">A</span>
-          <span className="account-name">Administrador</span>
+          <span className="account-name">{user?.name ?? "Administrador"}</span>
         </div>
+        <button className="min-h-9.5 rounded-md border border-(--sidebar-border) bg-(--theme-button) px-3 text-[13px] font-semibold text-foreground hover:bg-(--nav-hover)" onClick={logout}>Sair</button>
       </div>
     </aside>
   );

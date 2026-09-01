@@ -8,15 +8,22 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('admin@pde.com');
   const [password, setPassword] = useState('admin');
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!login(email, password)) {
-      setError('Informe e-mail e senha para entrar.');
+    setIsSubmitting(true);
+    const result = await login(email, password);
+    setIsSubmitting(false);
+
+    if (!result.ok) {
+      setError(result.message);
       return;
     }
+
+    setError('');
     router.replace('/dashboard');
   }
 
@@ -40,10 +47,10 @@ export default function LoginScreen() {
             <input className="min-h-11 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]" type="password" value={password} onChange={(event) => setPassword(event.target.value)} autoComplete="current-password" />
           </label>
           {error && <p className="m-0 text-[13px] font-medium text-[#d85a6b]" role="alert">{error}</p>}
-          <button className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:bg-[#7e18d4]" type="submit">Entrar</button>
+          <button className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:bg-[#7e18d4] disabled:opacity-60" type="submit" disabled={isSubmitting}>{isSubmitting ? 'Entrando...' : 'Entrar'}</button>
         </form>
 
-        <p className="mt-6 mb-0 text-center text-xs text-(--font-muted)">Mock: qualquer e-mail e senha preenchidos permitem o acesso.</p>
+        <p className="mt-6 mb-0 text-center text-xs text-(--font-muted)">Use as credenciais de admin configuradas na API.</p>
       </section>
     </div>
   );

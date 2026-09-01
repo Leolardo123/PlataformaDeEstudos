@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  // url      = env("DATABASE_URL") // Prisma v7 does not use this
+}
+
+enum Role {
+  ADMIN
+  STUDENT
+}
+
+enum RecordStatus {
+  DRAFT
+  PUBLISHED
+  ARCHIVED
+}
+
+enum QuestionType {
+  MULTIPLE_CHOICE
+}
+
+enum Difficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+model User {
+  id               String   @id @default(uuid())
+  name             String
+  email            String   @unique
+  passwordHash     String
+  role             Role     @default(STUDENT)
+  refreshTokenHash String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Notice {
+  id        String       @id @default(uuid())
+  title     String
+  message   String
+  status    RecordStatus @default(DRAFT)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+}
+
+model Subject {
+  id          String       @id @default(uuid())
+  name        String
+  description String?
+  status      RecordStatus @default(DRAFT)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  topics      Topic[]
+}
+
+model Topic {
+  id          String          @id @default(uuid())
+  name        String
+  description String?
+  order       Int             @default(0)
+  status      RecordStatus    @default(DRAFT)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  subjectId   String
+  subject     Subject         @relation(fields: [subjectId], references: [id])
+  flashcards  Flashcard[]
+  questions   QuestionTopic[]
+
+  @@index([subjectId])
+}
+
+model Question {
+  id           String                @id @default(uuid())
+  statement    String
+  type         QuestionType          @default(MULTIPLE_CHOICE)
+  difficulty   Difficulty            @default(MEDIUM)
+  explanation  String?
+  status       RecordStatus          @default(DRAFT)
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  alternatives QuestionAlternative[]
+  topics       QuestionTopic[]
+}
+
+model QuestionAlternative {
+  id         String   @id @default(uuid())
+  text       String
+  order      Int      @default(0)
+  isCorrect  Boolean  @default(false)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  @@index([questionId])
+}
+
+model QuestionTopic {
+  questionId String
+  topicId    String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  topic      Topic    @relation(fields: [topicId], references: [id], onDelete: Cascade)
+
+  @@id([questionId, topicId])
+  @@index([topicId])
+}
+
+model Flashcard {
+  id        String       @id @default(uuid())
+  front     String
+  back      String
+  order     Int          @default(0)
+  status    RecordStatus @default(DRAFT)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  topicId   String
+  topic     Topic        @relation(fields: [topicId], references: [id])
+
+  @@index([topicId])
+}

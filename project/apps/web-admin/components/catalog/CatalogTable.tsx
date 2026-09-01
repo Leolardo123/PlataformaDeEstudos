@@ -14,6 +14,10 @@ type CatalogTableProps = {
   entityNamePlural: string;
   detailLabel: string;
   rows: CatalogRow[];
+  isLoading?: boolean;
+  onCreate: (name: string) => Promise<CatalogRow>;
+  onUpdate: (row: CatalogRow, name: string) => Promise<CatalogRow>;
+  onDelete: (ids: string[]) => Promise<void>;
 };
 
 export function CatalogTable({
@@ -21,6 +25,10 @@ export function CatalogTable({
   entityNamePlural,
   detailLabel,
   rows,
+  isLoading,
+  onCreate,
+  onUpdate,
+  onDelete,
 }: CatalogTableProps) {
   const columns: TableColumn<CatalogRow>[] = [
     {
@@ -50,15 +58,12 @@ export function CatalogTable({
       entityNamePlural={entityNamePlural}
       columns={columns}
       data={rows}
+      isLoading={isLoading}
       getSearchText={(row) => `${row.name} ${row.detail} ${row.status}`}
       getTitle={(row) => row.name}
-      createRecord={(name) => ({
-        id: crypto.randomUUID(),
-        name,
-        detail: "Não informado",
-        status: "Rascunho" as const,
-      })}
-      updateRecord={(row, name) => ({ ...row, name })}
+      createRecord={onCreate}
+      updateRecord={onUpdate}
+      deleteRecordsApi={onDelete}
     />
   );
 }

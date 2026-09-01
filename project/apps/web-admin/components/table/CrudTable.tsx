@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 export type TableColumn<T> = {
   label: string;
@@ -12,10 +12,12 @@ type CrudTableProps<T extends { id: string }> = {
   entityNamePlural: string;
   columns: TableColumn<T>[];
   data: T[];
+  isLoading?: boolean;
   getSearchText: (row: T) => string;
   getTitle: (row: T) => string;
-  createRecord: (title: string) => T;
-  updateRecord: (row: T, title: string) => T;
+  createRecord: (title: string) => Promise<T>;
+  updateRecord: (row: T, title: string) => Promise<T>;
+  deleteRecordsApi: (ids: string[]) => Promise<void>;
 };
 
 export function CrudTable<T extends { id: string }>({
@@ -23,15 +25,23 @@ export function CrudTable<T extends { id: string }>({
   entityNamePlural,
   columns,
   data,
+  isLoading,
   getSearchText,
   getTitle,
   createRecord,
   updateRecord,
+  deleteRecordsApi,
 }: CrudTableProps<T>) {
   const [rows, setRows] = useState(data);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [filterOpen, setFilterOpen] = useState(false);
   const [search, setSearch] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setRows(data);
+  }, [data]);
 
   const visibleRows = useMemo(
     () => rows.filter((row) => getSearchText(row).toLocaleLowerCase().includes(search.toLocaleLowerCase())),
@@ -57,20 +67,52 @@ export function CrudTable<T extends { id: string }>({
     });
   }
 
-  function addRecord() {
+  async function addRecord() {
     const title = window.prompt(`Nome do novo ${entityName.toLocaleLowerCase()}:`);
-    if (title?.trim()) setRows((current) => [createRecord(title.trim()), ...current]);
+    if (!title?.trim()) return;
+
+    setError(null);
+    setBusy(true);
+    try {
+      const created = await createRecord(title.trim());
+      setRows((current) => [created, ...current]);
+    } catch (nextError) {
+      setError(nextError instanceof Error ? nextError.message : "Erro ao cadastrar item.");
+    } finally {
+      setBusy(false);
+    }
   }
 
-  function editRecord(row: T) {
+  async function editRecord(row: T) {
     const title = window.prompt(`Atualizar ${entityName.toLocaleLowerCase()}:`, getTitle(row));
-    if (title?.trim()) setRows((current) => current.map((item) => item.id === row.id ? updateRecord(item, title.trim()) : item));
+    if (!title?.trim()) return;
+
+    setError(null);
+    setBusy(true);
+    try {
+      const updated = await updateRecord(row, title.trim());
+      setRows((current) => current.map((item) => (item.id === row.id ? updated : item)));
+    } catch (nextError) {
+      setError(nextError instanceof Error ? nextError.message : "Erro ao atualizar item.");
+    } finally {
+      setBusy(false);
+    }
   }
 
-  function deleteRecords(ids: string[]) {
+  async function deleteRecords(ids: string[]) {
     if (!ids.length || !window.confirm(`Excluir ${ids.length} ${ids.length === 1 ? entityName.toLocaleLowerCase() : entityNamePlural.toLocaleLowerCase()}?`)) return;
-    setRows((current) => current.filter((row) => !ids.includes(row.id)));
-    setSelectedIds((current) => new Set([...current].filter((id) => !ids.includes(id))));
+
+    setError(null);
+    setBusy(true);
+    try {
+      await deleteRecordsApi(ids);
+      setRows((current) => current.filter((row) => !ids.includes(row.id)));
+      setSelectedIds((current) => new Set([...current].filter((id) => !ids.includes(id))));
+    } catch (nextError) {
+      setError(nextError instanceof Error ? nextError.message : "Erro ao excluir item.");
+    } finally {
+      setBusy(false);
+    }
   }
 
   return (
@@ -90,10 +132,13 @@ export function CrudTable<T extends { id: string }>({
         <button
           className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
           onClick={addRecord}
+          disabled={busy || isLoading}
         >
           + Cadastrar {entityName}
         </button>
       </div>
+
+      {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
 
       <div className="mb-3.5 flex min-h-10.5 gap-2.5">
         <button
@@ -107,6 +152,7 @@ export function CrudTable<T extends { id: string }>({
           <button
             className="min-h-9.5 rounded-md border border-[color-mix(in_srgb,#d85a6b_27%,transparent)] bg-[color-mix(in_srgb,#d85a6b_10%,transparent)] px-3.25 text-[13px] font-semibold text-[#d85a6b]"
             onClick={() => deleteRecords([...selectedIds])}
+            disabled={busy}
           >
             Excluir selecionados ({selectedIds.size})
           </button>
@@ -182,12 +228,14 @@ export function CrudTable<T extends { id: string }>({
                   <button
                     className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
                     onClick={() => editRecord(row)}
+                    disabled={busy}
                   >
                     Atualizar
                   </button>
                   <button
                     className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
                     onClick={() => deleteRecords([row.id])}
+                    disabled={busy}
                   >
                     Excluir
                   </button>
@@ -196,8 +244,10 @@ export function CrudTable<T extends { id: string }>({
             ))}
           </tbody>
         </table>
-        {visibleRows.length === 0 && (
-          <p className="m-0 p-7 text-center text-sm text-[var(--font-muted)]">
+        {isLoading ? (
+          <p className="m-0 p-7 text-center text-sm text-(--font-muted)">Carregando...</p>
+        ) : visibleRows.length === 0 && (
+          <p className="m-0 p-7 text-center text-sm text-(--font-muted)">
             Nenhum cadastro encontrado.
           </p>
         )}
