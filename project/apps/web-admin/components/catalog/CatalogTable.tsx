@@ -1,6 +1,11 @@
 "use client";
 
-import { CrudTable, type TableColumn } from "@/components/table/CrudTable";
+import {
+  CrudTable,
+  type CrudFormField,
+  type CrudFormValues,
+  type TableColumn,
+} from "@/components/table/CrudTable";
 
 type CatalogRow = {
   id: string;
@@ -9,28 +14,34 @@ type CatalogRow = {
   status: string;
 };
 
-type CatalogTableProps = {
+type CatalogTableProps<T extends CatalogRow> = {
   entityName: string;
   entityNamePlural: string;
   detailLabel: string;
-  rows: CatalogRow[];
+  rows: T[];
   isLoading?: boolean;
-  onCreate: (name: string) => Promise<CatalogRow>;
-  onUpdate: (row: CatalogRow, name: string) => Promise<CatalogRow>;
+  formFields: CrudFormField[];
+  getCreateInitialValues: () => CrudFormValues;
+  getUpdateInitialValues: (row: T) => CrudFormValues;
+  onCreate: (values: CrudFormValues) => Promise<T>;
+  onUpdate: (row: T, values: CrudFormValues) => Promise<T>;
   onDelete: (ids: string[]) => Promise<void>;
 };
 
-export function CatalogTable({
+export function CatalogTable<T extends CatalogRow>({
   entityName,
   entityNamePlural,
   detailLabel,
   rows,
   isLoading,
+  formFields,
+  getCreateInitialValues,
+  getUpdateInitialValues,
   onCreate,
   onUpdate,
   onDelete,
-}: CatalogTableProps) {
-  const columns: TableColumn<CatalogRow>[] = [
+}: CatalogTableProps<T>) {
+  const columns: TableColumn<T>[] = [
     {
       label: "Nome",
       render: (row) => <strong className="font-semibold">{row.name}</strong>,
@@ -63,6 +74,9 @@ export function CatalogTable({
       getTitle={(row) => row.name}
       createRecord={onCreate}
       updateRecord={onUpdate}
+      formFields={formFields}
+      getCreateInitialValues={getCreateInitialValues}
+      getUpdateInitialValues={getUpdateInitialValues}
       deleteRecordsApi={onDelete}
     />
   );

@@ -9,7 +9,6 @@ import {
   Post,
   Query,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { z } from 'zod';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -26,8 +25,10 @@ export class TopicsController {
   constructor(private readonly topicsService: TopicsService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createTopicSchema))
-  create(@Body() createTopicDto: CreateTopicDto) {
+  create(
+    @Body(new ZodValidationPipe(createTopicSchema))
+    createTopicDto: CreateTopicDto,
+  ) {
     return this.topicsService.create(createTopicDto);
   }
 
@@ -46,10 +47,10 @@ export class TopicsController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(updateTopicSchema))
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateTopicDto: UpdateTopicDto,
+    @Body(new ZodValidationPipe(updateTopicSchema))
+    updateTopicDto: UpdateTopicDto,
   ) {
     return this.topicsService.update(id, updateTopicDto);
   }

@@ -7,6 +7,17 @@ export type TableColumn<T> = {
   render: (row: T) => React.ReactNode;
 };
 
+export type CrudFormField = {
+  name: string;
+  label: string;
+  type?: 'text' | 'textarea' | 'select' | 'number';
+  placeholder?: string;
+  required?: boolean;
+  options?: Array<{ value: string; label: string }>;
+};
+
+export type CrudFormValues = Record<string, string>;
+
 type CrudTableProps<T extends { id: string }> = {
   entityName: string;
   entityNamePlural: string;
@@ -15,8 +26,11 @@ type CrudTableProps<T extends { id: string }> = {
   isLoading?: boolean;
   getSearchText: (row: T) => string;
   getTitle: (row: T) => string;
-  createRecord: (title: string) => Promise<T>;
-  updateRecord: (row: T, title: string) => Promise<T>;
+  createRecord: (values: CrudFormValues) => Promise<T>;
+  updateRecord: (row: T, values: CrudFormValues) => Promise<T>;
+  formFields: CrudFormField[];
+  getCreateInitialValues: () => CrudFormValues;
+  getUpdateInitialValues: (row: T) => CrudFormValues;
   deleteRecordsApi: (ids: string[]) => Promise<void>;
 };
 
@@ -30,6 +44,9 @@ export function CrudTable<T extends { id: string }>({
   getTitle,
   createRecord,
   updateRecord,
+  formFields,
+  getCreateInitialValues,
+  getUpdateInitialValues,
   deleteRecordsApi,
 }: CrudTableProps<T>) {
   const [rows, setRows] = useState(data);
@@ -38,8 +55,12 @@ export function CrudTable<T extends { id: string }>({
   const [search, setSearch] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [mode, setMode] = useState<'create' | 'update' | null>(null);
+  const [editingRow, setEditingRow] = useState<T | null>(null);
+  const [formValues, setFormValues] = useState<CrudFormValues>({});
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setRows(data);
   }, [data]);
 
@@ -67,33 +88,59 @@ export function CrudTable<T extends { id: string }>({
     });
   }
 
-  async function addRecord() {
-    const title = window.prompt(`Nome do novo ${entityName.toLocaleLowerCase()}:`);
-    if (!title?.trim()) return;
-
+  function openCreateForm() {
     setError(null);
-    setBusy(true);
-    try {
-      const created = await createRecord(title.trim());
-      setRows((current) => [created, ...current]);
-    } catch (nextError) {
-      setError(nextError instanceof Error ? nextError.message : "Erro ao cadastrar item.");
-    } finally {
-      setBusy(false);
-    }
+    setEditingRow(null);
+    setFormValues(getCreateInitialValues());
+    setMode('create');
   }
 
-  async function editRecord(row: T) {
-    const title = window.prompt(`Atualizar ${entityName.toLocaleLowerCase()}:`, getTitle(row));
-    if (!title?.trim()) return;
+  function openUpdateForm(row: T) {
+    setError(null);
+    setEditingRow(row);
+    setFormValues(getUpdateInitialValues(row));
+    setMode('update');
+  }
+
+  function closeForm() {
+    if (busy) return;
+    setMode(null);
+    setEditingRow(null);
+    setFormValues({});
+  }
+
+  function updateFormValue(field: string, value: string) {
+    setFormValues((current) => ({ ...current, [field]: value }));
+  }
+
+  async function submitForm() {
+    if (!mode) return;
 
     setError(null);
     setBusy(true);
+
     try {
-      const updated = await updateRecord(row, title.trim());
-      setRows((current) => current.map((item) => (item.id === row.id ? updated : item)));
+      if (mode === 'create') {
+        const created = await createRecord(formValues);
+        setRows((current) => [created, ...current]);
+      } else if (editingRow) {
+        const updated = await updateRecord(editingRow, formValues);
+        setRows((current) =>
+          current.map((item) => (item.id === editingRow.id ? updated : item)),
+        );
+      }
+
+      setMode(null);
+      setEditingRow(null);
+      setFormValues({});
     } catch (nextError) {
-      setError(nextError instanceof Error ? nextError.message : "Erro ao atualizar item.");
+      setError(
+        nextError instanceof Error
+          ? nextError.message
+          : mode === 'create'
+            ? 'Erro ao cadastrar item.'
+            : 'Erro ao atualizar item.',
+      );
     } finally {
       setBusy(false);
     }
@@ -131,7 +178,7 @@ export function CrudTable<T extends { id: string }>({
         </div>
         <button
           className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
-          onClick={addRecord}
+          onClick={openCreateForm}
           disabled={busy || isLoading}
         >
           + Cadastrar {entityName}
@@ -227,7 +274,7 @@ export function CrudTable<T extends { id: string }>({
                 <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4 last:border-0">
                   <button
                     className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                    onClick={() => editRecord(row)}
+                    onClick={() => openUpdateForm(row)}
                     disabled={busy}
                   >
                     Atualizar
@@ -252,6 +299,103 @@ export function CrudTable<T extends { id: string }>({
           </p>
         )}
       </div>
+
+      {mode && (
+        <div className="fixed inset-0 z-100 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true">
+          <section className="w-full max-w-xl rounded-2xl border border-(--sidebar-border) bg-(--color-sidebar) p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
+            <h2 className="m-0 text-xl font-bold text-foreground">
+              {mode === 'create' ? `Cadastrar ${entityName}` : `Atualizar ${getTitle(editingRow as T)}`}
+            </h2>
+            <p className="mt-2 mb-5 text-sm text-(--font-muted)">
+              {mode === 'create'
+                ? `Preencha os dados para cadastrar ${entityName.toLocaleLowerCase()}.`
+                : `Edite os dados de ${entityName.toLocaleLowerCase()}.`}
+            </p>
+
+            <div className="grid gap-4">
+              {formFields.map((field) => {
+                const value = formValues[field.name] ?? '';
+                const id = `crud-form-${field.name}`;
+
+                if (field.type === 'textarea') {
+                  return (
+                    <label className="grid gap-1.5 text-sm font-semibold text-foreground" key={field.name} htmlFor={id}>
+                      {field.label}
+                      <textarea
+                        id={id}
+                        className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
+                        value={value}
+                        onChange={(event) => updateFormValue(field.name, event.target.value)}
+                        placeholder={field.placeholder}
+                        required={field.required}
+                        disabled={busy}
+                      />
+                    </label>
+                  );
+                }
+
+                if (field.type === 'select') {
+                  return (
+                    <label className="grid gap-1.5 text-sm font-semibold text-foreground" key={field.name} htmlFor={id}>
+                      {field.label}
+                      <select
+                        id={id}
+                        className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
+                        value={value}
+                        onChange={(event) => updateFormValue(field.name, event.target.value)}
+                        required={field.required}
+                        disabled={busy}
+                      >
+                        {!field.required && <option value="">Selecione...</option>}
+                        {field.options?.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
+                  );
+                }
+
+                return (
+                  <label className="grid gap-1.5 text-sm font-semibold text-foreground" key={field.name} htmlFor={id}>
+                    {field.label}
+                    <input
+                      id={id}
+                      className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
+                      type={field.type === 'number' ? 'number' : 'text'}
+                      value={value}
+                      onChange={(event) => updateFormValue(field.name, event.target.value)}
+                      placeholder={field.placeholder}
+                      required={field.required}
+                      disabled={busy}
+                    />
+                  </label>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 flex justify-end gap-2.5">
+              <button
+                type="button"
+                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
+                onClick={closeForm}
+                disabled={busy}
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
+                onClick={() => void submitForm()}
+                disabled={busy}
+              >
+                {busy ? 'Salvando...' : mode === 'create' ? 'Cadastrar' : 'Salvar alterações'}
+              </button>
+            </div>
+          </section>
+        </div>
+      )}
     </section>
   );
 }

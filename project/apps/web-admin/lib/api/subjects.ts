@@ -8,18 +8,37 @@ export type SubjectResource = {
   status: RecordStatus;
 };
 
+export type CreateSubjectPayload = {
+  name: string;
+  description?: string;
+  status?: RecordStatus;
+};
+
+export type UpdateSubjectPayload = {
+  name?: string;
+  description?: string;
+  status?: RecordStatus;
+};
+
 export const subjectsApi = {
   list(accessToken: string) {
     return apiRequest<SubjectResource[]>('/subjects', undefined, accessToken);
   },
-  create(accessToken: string, payload: { name: string }) {
+  create(accessToken: string, payload: CreateSubjectPayload) {
     return apiRequest<SubjectResource>(
       '/subjects',
-      { method: 'POST', body: JSON.stringify({ name: payload.name, status: 'DRAFT' }) },
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          name: payload.name,
+          description: payload.description,
+          status: payload.status ?? 'DRAFT',
+        }),
+      },
       accessToken,
     );
   },
-  update(accessToken: string, id: string, payload: { name: string }) {
+  update(accessToken: string, id: string, payload: UpdateSubjectPayload) {
     return apiRequest<SubjectResource>(
       `/subjects/${id}`,
       { method: 'PATCH', body: JSON.stringify(payload) },

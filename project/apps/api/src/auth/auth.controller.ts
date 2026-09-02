@@ -5,7 +5,6 @@ import {
   Post,
   Req,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import type { Request } from 'express';
 import { ZodValidationPipe } from '../common/zod-validation.pipe';
@@ -24,8 +23,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('login')
-  @UsePipes(new ZodValidationPipe(loginSchema))
-  login(@Body() body: LoginDto) {
+  login(@Body(new ZodValidationPipe(loginSchema)) body: LoginDto) {
     return this.authService.login(body);
   }
 

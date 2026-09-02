@@ -8,7 +8,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { NoticesService } from './notices.service';
 import {
@@ -28,8 +27,10 @@ export class NoticesController {
   constructor(private readonly noticesService: NoticesService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createNoticeSchema))
-  create(@Body() createNoticeDto: CreateNoticeDto) {
+  create(
+    @Body(new ZodValidationPipe(createNoticeSchema))
+    createNoticeDto: CreateNoticeDto,
+  ) {
     return this.noticesService.create(createNoticeDto);
   }
 
@@ -44,10 +45,10 @@ export class NoticesController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(updateNoticeSchema))
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateNoticeDto: UpdateNoticeDto,
+    @Body(new ZodValidationPipe(updateNoticeSchema))
+    updateNoticeDto: UpdateNoticeDto,
   ) {
     return this.noticesService.update(id, updateNoticeDto);
   }

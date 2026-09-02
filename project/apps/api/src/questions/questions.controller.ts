@@ -8,7 +8,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { QuestionsService } from './questions.service';
 import {
@@ -28,8 +27,10 @@ export class QuestionsController {
   constructor(private readonly questionsService: QuestionsService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createQuestionSchema))
-  create(@Body() createQuestionDto: CreateQuestionDto) {
+  create(
+    @Body(new ZodValidationPipe(createQuestionSchema))
+    createQuestionDto: CreateQuestionDto,
+  ) {
     return this.questionsService.create(createQuestionDto);
   }
 
@@ -44,10 +45,10 @@ export class QuestionsController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(updateQuestionSchema))
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateQuestionDto: UpdateQuestionDto,
+    @Body(new ZodValidationPipe(updateQuestionSchema))
+    updateQuestionDto: UpdateQuestionDto,
   ) {
     return this.questionsService.update(id, updateQuestionDto);
   }

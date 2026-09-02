@@ -6,22 +6,40 @@ import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
   apiClient,
+  type RecordStatus,
   statusToLabel,
   type SubjectResource,
 } from "@/lib/api";
 
-function toRow(subject: SubjectResource) {
+type SubjectRow = {
+  id: string;
+  name: string;
+  detail: string;
+  status: string;
+  description: string;
+  recordStatus: RecordStatus;
+};
+
+const statusOptions = [
+  { value: "DRAFT", label: "Rascunho" },
+  { value: "PUBLISHED", label: "Ativo" },
+  { value: "ARCHIVED", label: "Arquivado" },
+];
+
+function toRow(subject: SubjectResource): SubjectRow {
   return {
     id: subject.id,
     name: subject.name,
     detail: subject.description ?? "Sem descrição",
     status: statusToLabel(subject.status),
+    description: subject.description ?? "",
+    recordStatus: subject.status,
   };
 }
 
 export default function MateriasPage() {
   const { accessToken } = useAuth();
-  const [rows, setRows] = useState<Array<{ id: string; name: string; detail: string; status: string }>>([]);
+  const [rows, setRows] = useState<SubjectRow[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -40,14 +58,33 @@ export default function MateriasPage() {
         detailLabel="Descrição"
         rows={rows}
         isLoading={isLoading}
-        onCreate={async (name) => {
+        formFields={[
+          { name: "name", label: "Nome", required: true, placeholder: "Ex.: Matemática" },
+          { name: "description", label: "Descrição", type: "textarea", placeholder: "Detalhes da matéria" },
+          { name: "status", label: "Status", type: "select", required: true, options: statusOptions },
+        ]}
+        getCreateInitialValues={() => ({ name: "", description: "", status: "DRAFT" })}
+        getUpdateInitialValues={(row) => ({
+          name: row.name,
+          description: row.description,
+          status: row.recordStatus,
+        })}
+        onCreate={async (values) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const created = await apiClient.subjects.create(accessToken, { name });
+          const created = await apiClient.subjects.create(accessToken, {
+            name: values.name.trim(),
+            description: values.description.trim() || undefined,
+            status: values.status as RecordStatus,
+          });
           return toRow(created);
         }}
-        onUpdate={async (row, name) => {
+        onUpdate={async (row, values) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await apiClient.subjects.update(accessToken, row.id, { name });
+          const updated = await apiClient.subjects.update(accessToken, row.id, {
+            name: values.name.trim(),
+            description: values.description.trim() || undefined,
+            status: values.status as RecordStatus,
+          });
           return toRow(updated);
         }}
         onDelete={async (ids) => {

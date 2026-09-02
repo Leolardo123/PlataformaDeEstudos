@@ -8,18 +8,37 @@ export type NoticeResource = {
   status: RecordStatus;
 };
 
+export type CreateNoticePayload = {
+  title: string;
+  message?: string;
+  status?: RecordStatus;
+};
+
+export type UpdateNoticePayload = {
+  title?: string;
+  message?: string;
+  status?: RecordStatus;
+};
+
 export const noticesApi = {
   list(accessToken: string) {
     return apiRequest<NoticeResource[]>('/notices', undefined, accessToken);
   },
-  create(accessToken: string, payload: { title: string }) {
+  create(accessToken: string, payload: CreateNoticePayload) {
     return apiRequest<NoticeResource>(
       '/notices',
-      { method: 'POST', body: JSON.stringify({ title: payload.title, status: 'DRAFT' }) },
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          title: payload.title,
+          message: payload.message,
+          status: payload.status ?? 'DRAFT',
+        }),
+      },
       accessToken,
     );
   },
-  update(accessToken: string, id: string, payload: { title: string }) {
+  update(accessToken: string, id: string, payload: UpdateNoticePayload) {
     return apiRequest<NoticeResource>(
       `/notices/${id}`,
       { method: 'PATCH', body: JSON.stringify(payload) },

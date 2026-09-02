@@ -8,7 +8,6 @@ import {
   Param,
   Delete,
   UseGuards,
-  UsePipes,
 } from '@nestjs/common';
 import { FlashcardsService } from './flashcards.service';
 import {
@@ -28,8 +27,10 @@ export class FlashcardsController {
   constructor(private readonly flashcardsService: FlashcardsService) {}
 
   @Post()
-  @UsePipes(new ZodValidationPipe(createFlashcardSchema))
-  create(@Body() createFlashcardDto: CreateFlashcardDto) {
+  create(
+    @Body(new ZodValidationPipe(createFlashcardSchema))
+    createFlashcardDto: CreateFlashcardDto,
+  ) {
     return this.flashcardsService.create(createFlashcardDto);
   }
 
@@ -44,10 +45,10 @@ export class FlashcardsController {
   }
 
   @Patch(':id')
-  @UsePipes(new ZodValidationPipe(updateFlashcardSchema))
   update(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() updateFlashcardDto: UpdateFlashcardDto,
+    @Body(new ZodValidationPipe(updateFlashcardSchema))
+    updateFlashcardDto: UpdateFlashcardDto,
   ) {
     return this.flashcardsService.update(id, updateFlashcardDto);
   }
