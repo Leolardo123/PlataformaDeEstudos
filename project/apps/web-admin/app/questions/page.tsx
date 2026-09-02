@@ -5,11 +5,8 @@ import { CatalogTable } from "@/components/catalog/CatalogTable";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  createQuestion,
-  deleteQuestion,
-  listQuestions,
+  apiClient,
   statusToLabel,
-  updateQuestion,
   type QuestionResource,
 } from "@/lib/api";
 
@@ -30,7 +27,7 @@ export default function QuestoesPage() {
   useEffect(() => {
     if (!accessToken) return;
     setIsLoading(true);
-    void listQuestions(accessToken)
+    void apiClient.questions.list(accessToken)
       .then((questions) => setRows(questions.map(toRow)))
       .finally(() => setIsLoading(false));
   }, [accessToken]);
@@ -45,17 +42,17 @@ export default function QuestoesPage() {
         isLoading={isLoading}
         onCreate={async (name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const created = await createQuestion(accessToken, { statement: name });
+          const created = await apiClient.questions.create(accessToken, { statement: name });
           return toRow(created);
         }}
         onUpdate={async (row, name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await updateQuestion(accessToken, row.id, { statement: name });
+          const updated = await apiClient.questions.update(accessToken, row.id, { statement: name });
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => deleteQuestion(accessToken, id)));
+          await Promise.all(ids.map((id) => apiClient.questions.delete(accessToken, id)));
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />

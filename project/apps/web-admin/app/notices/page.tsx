@@ -5,11 +5,8 @@ import { CatalogTable } from "@/components/catalog/CatalogTable";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  createNotice,
-  deleteNotice,
-  listNotices,
+  apiClient,
   statusToLabel,
-  updateNotice,
   type NoticeResource,
 } from "@/lib/api";
 
@@ -30,7 +27,7 @@ export default function EditaisPage() {
   useEffect(() => {
     if (!accessToken) return;
     setIsLoading(true);
-    void listNotices(accessToken)
+    void apiClient.notices.list(accessToken)
       .then((notices) => setRows(notices.map(toRow)))
       .finally(() => setIsLoading(false));
   }, [accessToken]);
@@ -45,17 +42,17 @@ export default function EditaisPage() {
         isLoading={isLoading}
         onCreate={async (name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const created = await createNotice(accessToken, { title: name });
+          const created = await apiClient.notices.create(accessToken, { title: name });
           return toRow(created);
         }}
         onUpdate={async (row, name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await updateNotice(accessToken, row.id, { title: name });
+          const updated = await apiClient.notices.update(accessToken, row.id, { title: name });
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => deleteNotice(accessToken, id)));
+          await Promise.all(ids.map((id) => apiClient.notices.delete(accessToken, id)));
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />

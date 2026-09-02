@@ -5,11 +5,8 @@ import { CatalogTable } from "@/components/catalog/CatalogTable";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  createSubject,
-  deleteSubject,
-  listSubjects,
+  apiClient,
   statusToLabel,
-  updateSubject,
   type SubjectResource,
 } from "@/lib/api";
 
@@ -30,7 +27,7 @@ export default function MateriasPage() {
   useEffect(() => {
     if (!accessToken) return;
     setIsLoading(true);
-    void listSubjects(accessToken)
+    void apiClient.subjects.list(accessToken)
       .then((subjects) => setRows(subjects.map(toRow)))
       .finally(() => setIsLoading(false));
   }, [accessToken]);
@@ -45,17 +42,17 @@ export default function MateriasPage() {
         isLoading={isLoading}
         onCreate={async (name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const created = await createSubject(accessToken, { name });
+          const created = await apiClient.subjects.create(accessToken, { name });
           return toRow(created);
         }}
         onUpdate={async (row, name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await updateSubject(accessToken, row.id, { name });
+          const updated = await apiClient.subjects.update(accessToken, row.id, { name });
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => deleteSubject(accessToken, id)));
+          await Promise.all(ids.map((id) => apiClient.subjects.delete(accessToken, id)));
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />

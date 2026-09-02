@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { authLogin, authMe, type AuthUser } from '@/lib/api';
+import { apiClient, type AuthUser } from '@/lib/api';
 
 type AuthSession = {
   accessToken: string;
@@ -36,7 +36,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     const syncSession = window.setTimeout(async () => {
       try {
-        const currentUser = await authMe(session.accessToken);
+        const currentUser = await apiClient.auth.me(session.accessToken);
         setAccessToken(session.accessToken);
         setUser(currentUser);
       } catch {
@@ -56,7 +56,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      const session = await authLogin(email.trim(), password);
+      const session = await apiClient.auth.login(email.trim(), password);
       localStorage.setItem(SESSION_KEY, JSON.stringify(session));
       setAccessToken(session.accessToken);
       setUser(session.user);

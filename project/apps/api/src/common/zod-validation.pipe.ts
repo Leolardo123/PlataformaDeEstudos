@@ -5,6 +5,7 @@ import {
   type ArgumentMetadata,
 } from '@nestjs/common';
 import { ZodError, type ZodType } from 'zod';
+import { formatZodError } from './zod-error-formatter';
 
 @Injectable()
 export class ZodValidationPipe<T = unknown> implements PipeTransform {
@@ -16,7 +17,8 @@ export class ZodValidationPipe<T = unknown> implements PipeTransform {
     } catch (error) {
       if (error instanceof ZodError) {
         throw new BadRequestException({
-          message: `Validation failed for ${metadata.type}`,
+          message: formatZodError(error),
+          validationScope: metadata.type,
           issues: error.issues,
         });
       }

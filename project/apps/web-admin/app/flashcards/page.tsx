@@ -5,12 +5,8 @@ import { CatalogTable } from "@/components/catalog/CatalogTable";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  createFlashcard,
-  deleteFlashcard,
-  listFlashcards,
-  listTopics,
+  apiClient,
   statusToLabel,
-  updateFlashcard,
   type FlashcardResource,
   type TopicResource,
 } from "@/lib/api";
@@ -34,7 +30,7 @@ export default function FlashcardsPage() {
     if (!accessToken) return;
 
     setIsLoading(true);
-    void Promise.all([listFlashcards(accessToken), listTopics(accessToken)])
+    void Promise.all([apiClient.flashcards.list(accessToken), apiClient.topics.list(accessToken)])
       .then(([flashcards, topicList]) => {
         setRows(flashcards.map(toRow));
         setTopics(topicList);
@@ -56,17 +52,17 @@ export default function FlashcardsPage() {
           if (!topicId) {
             throw new Error("Cadastre um tópico antes de criar flashcards.");
           }
-          const created = await createFlashcard(accessToken, { front: name, topicId });
+          const created = await apiClient.flashcards.create(accessToken, { front: name, topicId });
           return toRow(created);
         }}
         onUpdate={async (row, name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await updateFlashcard(accessToken, row.id, { front: name });
+          const updated = await apiClient.flashcards.update(accessToken, row.id, { front: name });
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => deleteFlashcard(accessToken, id)));
+          await Promise.all(ids.map((id) => apiClient.flashcards.delete(accessToken, id)));
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />

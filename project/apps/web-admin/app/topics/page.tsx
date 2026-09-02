@@ -5,12 +5,8 @@ import { CatalogTable } from "@/components/catalog/CatalogTable";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import {
-  createTopic,
-  deleteTopic,
-  listSubjects,
-  listTopics,
+  apiClient,
   statusToLabel,
-  updateTopic,
   type SubjectResource,
   type TopicResource,
 } from "@/lib/api";
@@ -34,7 +30,7 @@ export default function TopicosPage() {
     if (!accessToken) return;
 
     setIsLoading(true);
-    void Promise.all([listTopics(accessToken), listSubjects(accessToken)])
+    void Promise.all([apiClient.topics.list(accessToken), apiClient.subjects.list(accessToken)])
       .then(([topics, subjectsList]) => {
         setRows(topics.map(toRow));
         setSubjects(subjectsList);
@@ -56,17 +52,17 @@ export default function TopicosPage() {
           if (!subjectId) {
             throw new Error("Cadastre uma matéria antes de criar tópicos.");
           }
-          const created = await createTopic(accessToken, { name, subjectId });
+          const created = await apiClient.topics.create(accessToken, { name, subjectId });
           return toRow(created);
         }}
         onUpdate={async (row, name) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await updateTopic(accessToken, row.id, { name });
+          const updated = await apiClient.topics.update(accessToken, row.id, { name });
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => deleteTopic(accessToken, id)));
+          await Promise.all(ids.map((id) => apiClient.topics.delete(accessToken, id)));
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />
