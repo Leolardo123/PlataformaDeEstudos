@@ -4,8 +4,8 @@ import { AbstractRepository } from 'src/prisma/repository/Abstract.respository';
 
 @Injectable()
 class QuestionRepository extends AbstractRepository<'Question'> {
-  constructor(private readonly prismaService: PrismaService) {
-    super(prismaService, 'Question');
+  constructor(private readonly prisma: PrismaService) {
+    super(prisma, 'Question');
   }
 }
 
