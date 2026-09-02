@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { CreateQuestionDto } from '../dto/create-question.dto';
+import QuestionRepository from '../repository/question.repository';
 
 @Injectable()
 export class CreateQuestionService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly questionRepository: QuestionRepository) {}
 
   execute(createQuestionDto: CreateQuestionDto) {
-    return this.prisma.question.create({
+    return this.questionRepository.create({
       data: {
         statement: createQuestionDto.statement,
         type: createQuestionDto.type,

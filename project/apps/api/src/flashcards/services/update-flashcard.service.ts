@@ -1,18 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { UpdateFlashcardDto } from '../dto/update-flashcard.dto';
-import { FindOneFlashcardService } from './find-one-flashcard.service';
+import FlashcardRepository from '../repository/flashcard.repository';
+import HttpStatusCodes from 'src/error/HttpStatusCodes.error';
+import AppError from 'src/error/AppError.error';
 
 @Injectable()
 export class UpdateFlashcardService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly findOneFlashcardService: FindOneFlashcardService,
-  ) {}
+  constructor(private readonly flashcardRepository: FlashcardRepository) {}
 
   async execute(id: string, updateFlashcardDto: UpdateFlashcardDto) {
-    await this.findOneFlashcardService.execute(id);
-    return this.prisma.flashcard.update({
+    const flashcard = await this.flashcardRepository.findUnique({
+      where: { id },
+    });
+
+    if (!flashcard) {
+      throw new AppError(
+        'Flashcard não encontrado.',
+        HttpStatusCodes.NOT_FOUND,
+      );
+    }
+
+    return this.flashcardRepository.update({
       where: { id },
       data: updateFlashcardDto,
       include: { topic: true },

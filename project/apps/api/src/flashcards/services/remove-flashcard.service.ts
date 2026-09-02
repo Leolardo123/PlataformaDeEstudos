@@ -1,16 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
-import { FindOneFlashcardService } from './find-one-flashcard.service';
+import FlashcardRepository from '../repository/flashcard.repository';
+import HttpStatusCodes from 'src/error/HttpStatusCodes.error';
+import AppError from 'src/error/AppError.error';
 
 @Injectable()
 export class RemoveFlashcardService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly findOneFlashcardService: FindOneFlashcardService,
-  ) {}
+  constructor(private readonly flashcardRepository: FlashcardRepository) {}
 
   async execute(id: string) {
-    await this.findOneFlashcardService.execute(id);
-    return this.prisma.flashcard.delete({ where: { id } });
+    const flashcard = await this.flashcardRepository.findUnique({
+      where: { id },
+    });
+
+    if (!flashcard) {
+      throw new AppError('Flashcard not found.', HttpStatusCodes.NOT_FOUND);
+    }
+
+    return this.flashcardRepository.delete({ where: { id } });
   }
 }

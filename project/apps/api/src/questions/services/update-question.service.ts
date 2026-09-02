@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { UpdateQuestionDto } from '../dto/update-question.dto';
 import { FindOneQuestionService } from './find-one-question.service';
+import QuestionRepository from '../repository/question.repository';
 
 @Injectable()
 export class UpdateQuestionService {
   constructor(
-    private readonly prisma: PrismaService,
+    private readonly questionRepository: QuestionRepository,
     private readonly findOneQuestionService: FindOneQuestionService,
   ) {}
 
@@ -15,7 +15,7 @@ export class UpdateQuestionService {
 
     const { topicIds, alternatives, ...rest } = updateQuestionDto;
 
-    return this.prisma.question.update({
+    return this.questionRepository.update({
       where: { id },
       data: {
         ...rest,

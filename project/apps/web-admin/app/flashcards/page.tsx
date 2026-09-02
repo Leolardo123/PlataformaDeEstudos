@@ -58,13 +58,19 @@ export default function FlashcardsPage() {
   useEffect(() => {
     if (!accessToken) return;
 
-    setIsLoading(true);
-    void Promise.all([apiClient.flashcards.list(accessToken), apiClient.topics.list(accessToken)])
-      .then(([flashcards, topicList]) => {
+    (async () => {
+      setIsLoading(true);
+      try {
+        const [flashcards, topicList] = await Promise.all([
+          apiClient.flashcards.list(accessToken),
+          apiClient.topics.list(accessToken),
+        ]);
         setRows(flashcards.map(toRow));
         setTopics(topicList);
-      })
-      .finally(() => setIsLoading(false));
+      } finally {
+        setIsLoading(false);
+      }
+    })();
   }, [accessToken]);
 
   return (
@@ -76,11 +82,32 @@ export default function FlashcardsPage() {
         rows={rows}
         isLoading={isLoading}
         formFields={[
-          { name: "front", label: "Frente", required: true, placeholder: "Pergunta ou conceito" },
-          { name: "back", label: "Verso", type: "textarea", placeholder: "Resposta" },
-          { name: "order", label: "Ordem", type: "number", placeholder: "0" },
-          { name: "status", label: "Status", type: "select", required: true, options: statusOptions },
-          { name: "topicId", label: "Tópico", type: "select", required: true, options: topicOptions },
+          {
+            name: "front",
+            label: "Frente",
+            required: true,
+            placeholder: "Pergunta ou conceito",
+          },
+          {
+            name: "back",
+            label: "Verso",
+            type: "textarea",
+            placeholder: "Resposta",
+          },
+          {
+            name: "status",
+            label: "Status",
+            type: "select",
+            required: true,
+            options: statusOptions,
+          },
+          {
+            name: "topicId",
+            label: "Tópico",
+            type: "select",
+            required: true,
+            options: topicOptions,
+          },
         ]}
         getCreateInitialValues={() => ({
           front: "",
@@ -113,18 +140,24 @@ export default function FlashcardsPage() {
         }}
         onUpdate={async (row, values) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          const updated = await apiClient.flashcards.update(accessToken, row.id, {
-            front: values.front.trim(),
-            back: values.back.trim() || undefined,
-            order: values.order.trim() ? Number(values.order) : undefined,
-            status: values.status as RecordStatus,
-            topicId: values.topicId,
-          });
+          const updated = await apiClient.flashcards.update(
+            accessToken,
+            row.id,
+            {
+              front: values.front.trim(),
+              back: values.back.trim() || undefined,
+              order: values.order.trim() ? Number(values.order) : undefined,
+              status: values.status as RecordStatus,
+              topicId: values.topicId,
+            },
+          );
           return toRow(updated);
         }}
         onDelete={async (ids) => {
           if (!accessToken) throw new Error("Sessão inválida.");
-          await Promise.all(ids.map((id) => apiClient.flashcards.delete(accessToken, id)));
+          await Promise.all(
+            ids.map((id) => apiClient.flashcards.delete(accessToken, id)),
+          );
           setRows((current) => current.filter((row) => !ids.includes(row.id)));
         }}
       />

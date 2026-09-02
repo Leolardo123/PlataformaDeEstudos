@@ -1,18 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { UpdateNoticeDto } from '../dto/update-notice.dto';
-import { FindOneNoticeService } from './find-one-notice.service';
+import NoticeRepository from '../repository/notice.repository';
+import AppError from 'src/error/AppError.error';
+import HttpStatusCodes from 'src/error/HttpStatusCodes.error';
 
 @Injectable()
 export class UpdateNoticeService {
-  constructor(
-    private readonly prisma: PrismaService,
-    private readonly findOneNoticeService: FindOneNoticeService,
-  ) {}
+  constructor(private readonly noticeRepository: NoticeRepository) {}
 
   async execute(id: string, updateNoticeDto: UpdateNoticeDto) {
-    await this.findOneNoticeService.execute(id);
-    return this.prisma.notice.update({
+    const notice = await this.noticeRepository.findUnique({ where: { id } });
+
+    if (!notice) {
+      throw new AppError('Edital não encontrado.', HttpStatusCodes.NOT_FOUND);
+    }
+
+    return this.noticeRepository.update({
       where: { id },
       data: updateNoticeDto,
     });

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import TopicRepository from '../repository/topic.repository';
 
 @Injectable()
 export class FindAllTopicsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly topicRepository: TopicRepository) {}
 
   execute(subjectId?: string) {
-    return this.prisma.topic.findMany({
+    return this.topicRepository.findMany({
       where: subjectId ? { subjectId } : undefined,
       include: { subject: true },
       orderBy: [

@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import FlashcardRepository from '../repository/flashcard.repository';
 
 @Injectable()
 export class FindOneFlashcardService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly flashcardRepository: FlashcardRepository) {}
 
   async execute(id: string) {
-    const flashcard = await this.prisma.flashcard.findUnique({
+    const flashcard = await this.flashcardRepository.findUnique({
       where: { id },
       include: { topic: true },
     });

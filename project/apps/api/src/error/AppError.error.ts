@@ -1,9 +1,9 @@
-import StatusCodes from './StatusCodes.error';
+import HttpStatusCodes from './HttpStatusCodes.error';
 
 class AppError extends Error {
   constructor(
     public readonly message: string,
-    public readonly statusCode: StatusCodes,
+    public readonly statusCode: HttpStatusCodes,
   ) {
     super(message);
   }

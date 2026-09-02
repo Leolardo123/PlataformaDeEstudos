@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import NoticeRepository from '../repository/notice.repository';
 
 @Injectable()
 export class FindAllNoticesService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly noticeRepository: NoticeRepository) {}
 
   execute() {
-    return this.prisma.notice.findMany({ orderBy: { createdAt: 'desc' } });
+    return this.noticeRepository.findMany({ orderBy: { createdAt: 'desc' } });
   }
 }

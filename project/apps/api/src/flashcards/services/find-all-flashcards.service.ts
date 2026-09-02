@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import FlashcardRepository from '../repository/flashcard.repository';
 
 @Injectable()
 export class FindAllFlashcardsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly flashcardRepository: FlashcardRepository) {}
 
   execute() {
-    return this.prisma.flashcard.findMany({
+    return this.flashcardRepository.findMany({
       include: { topic: true },
       orderBy: [
         { topic: { name: 'asc' } },

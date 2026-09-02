@@ -1,12 +1,12 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
+import SubjectRepository from '../repository/subject.repository';
 
 @Injectable()
 export class FindOneSubjectService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly subjectRepository: SubjectRepository) {}
 
   async execute(id: string) {
-    const subject = await this.prisma.subject.findUnique({
+    const subject = await this.subjectRepository.findUnique({
       where: { id },
       include: { topics: true },
     });

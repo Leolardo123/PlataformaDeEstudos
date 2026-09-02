@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { CreateTopicDto } from '../dto/create-topic.dto';
+import TopicRepository from '../repository/topic.repository';
 
 @Injectable()
 export class CreateTopicService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly topicRepository: TopicRepository) {}
 
   execute(createTopicDto: CreateTopicDto) {
-    return this.prisma.topic.create({
+    return this.topicRepository.create({
       data: {
         name: createTopicDto.name,
         description: createTopicDto.description,

@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from '../../prisma/prisma.service';
 import type { CreateNoticeDto } from '../dto/create-notice.dto';
+import NoticeRepository from '../repository/notice.repository';
 
 @Injectable()
 export class CreateNoticeService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly noticeRepository: NoticeRepository) {}
 
   execute(createNoticeDto: CreateNoticeDto) {
-    return this.prisma.notice.create({
+    return this.noticeRepository.create({
       data: {
         title: createNoticeDto.title,
         message: createNoticeDto.message ?? createNoticeDto.title,
