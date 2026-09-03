@@ -149,8 +149,6 @@ Tabela de progresso:
 
 | Propriedade | ✓ | ☐ | ☐ |
 
-  
-
 ---
 
 # Atualizações de conteúdo
