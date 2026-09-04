@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import FlashcardRepository from '../repository/flashcard.repository';
-import HttpStatusCodes from 'src/error/HttpStatusCodes.error';
 import AppError from 'src/error/AppError.error';
+import HttpStatusCodes from 'src/error/HttpStatusCodes.error';
 
 @Injectable()
 export class RemoveFlashcardService {

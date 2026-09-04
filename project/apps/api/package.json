@@ -86,6 +86,10 @@
     "transformIgnorePatterns": [
       "node_modules/(?!(@nestjs)/)"
     ],
+    "moduleNameMapper": {
+      "^src/(.*)$": "<rootDir>/$1",
+      "^generated/(.*)$": "<rootDir>/../generated/$1"
+    },
     "collectCoverageFrom": [
       "**/*.(t|j)s"
     ],
