@@ -15,7 +15,15 @@ export class UpdateTopicService {
     return this.topicRepository.update({
       where: { id },
       data: updateTopicDto,
-      include: { subject: true },
+      include: {
+        subject: {
+          include: {
+            notices: {
+              include: { notice: true },
+            },
+          },
+        },
+      },
     });
   }
 }

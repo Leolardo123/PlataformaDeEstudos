@@ -8,7 +8,12 @@ export class FindOneSubjectService {
   async execute(id: string) {
     const subject = await this.subjectRepository.findUnique({
       where: { id },
-      include: { topics: true },
+      include: {
+        topics: true,
+        notices: {
+          include: { notice: true },
+        },
+      },
     });
 
     if (!subject) {

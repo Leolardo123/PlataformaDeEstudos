@@ -12,9 +12,23 @@ export class UpdateSubjectService {
 
   async execute(id: string, updateSubjectDto: UpdateSubjectDto) {
     await this.findOneSubjectService.execute(id);
+
+    const { noticeIds, ...subjectData } = updateSubjectDto;
+
     return this.subjectRepository.update({
       where: { id },
-      data: updateSubjectDto,
+      data: {
+        ...subjectData,
+        notices:
+          noticeIds === undefined
+            ? undefined
+            : {
+                deleteMany: { subjectId: id },
+                create: noticeIds.map((noticeId) => ({
+                  notice: { connect: { id: noticeId } },
+                })),
+              },
+      },
     });
   }
 }

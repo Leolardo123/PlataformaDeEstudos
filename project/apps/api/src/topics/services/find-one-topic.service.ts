@@ -8,7 +8,15 @@ export class FindOneTopicService {
   async execute(id: string) {
     const topic = await this.topicRepository.findUnique({
       where: { id },
-      include: { subject: true },
+      include: {
+        subject: {
+          include: {
+            notices: {
+              include: { notice: true },
+            },
+          },
+        },
+      },
     });
 
     if (!topic) {

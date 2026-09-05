@@ -21,8 +21,8 @@ export class TopicsService {
     return this.createTopicService.execute(createTopicDto);
   }
 
-  findAll(subjectId?: string) {
-    return this.findAllTopicsService.execute(subjectId);
+  findAll(subjectId?: string, noticeId?: string) {
+    return this.findAllTopicsService.execute({ subjectId, noticeId });
   }
 
   findOne(id: string) {

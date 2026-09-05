@@ -16,9 +16,9 @@ import { UpdateTopicService } from './update-topic.service';
 type TopicItem = {
   id: string;
   name: string;
-  description?: string;
-  order?: number;
-  status?: (typeof RecordStatus)[keyof typeof RecordStatus];
+  description: string | undefined;
+  order: number | undefined;
+  status: (typeof RecordStatus)[keyof typeof RecordStatus] | undefined;
   subjectId: string;
   createdAt: Date;
 };
@@ -69,8 +69,8 @@ describe('Topics CRUD services', () => {
     await createService.execute({ name: 'A', subjectId: 's1' });
     await createService.execute({ name: 'B', subjectId: 's2' });
 
-    const all = await findAllService.execute();
-    const fromS1 = await findAllService.execute('s1');
+    const all = await findAllService.execute({});
+    const fromS1 = await findAllService.execute({ subjectId: 's1' });
 
     expect(all).toHaveLength(2);
     expect(fromS1).toHaveLength(1);

@@ -7,6 +7,19 @@ export class CreateSubjectService {
   constructor(private readonly subjectRepository: SubjectRepository) {}
 
   execute(createSubjectDto: CreateSubjectDto) {
-    return this.subjectRepository.create({ data: createSubjectDto });
+    const { noticeIds, ...subjectData } = createSubjectDto;
+
+    return this.subjectRepository.create({
+      data: {
+        ...subjectData,
+        notices: noticeIds?.length
+          ? {
+              create: noticeIds.map((noticeId) => ({
+                notice: { connect: { id: noticeId } },
+              })),
+            }
+          : undefined,
+      },
+    });
   }
 }

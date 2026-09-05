@@ -11,11 +11,23 @@ export class CreateTopicService {
       data: {
         name: createTopicDto.name,
         description: createTopicDto.description,
+        contentRichText: createTopicDto.contentRichText,
+        contentPdfUrls: createTopicDto.contentPdfUrls,
+        contentVideoUrls: createTopicDto.contentVideoUrls,
+        contentLinkUrls: createTopicDto.contentLinkUrls,
         order: createTopicDto.order,
         status: createTopicDto.status,
         subjectId: createTopicDto.subjectId,
       },
-      include: { subject: true },
+      include: {
+        subject: {
+          include: {
+            notices: {
+              include: { notice: true },
+            },
+          },
+        },
+      },
     });
   }
 }

@@ -6,6 +6,8 @@ export class FindAllNoticesService {
   constructor(private readonly noticeRepository: NoticeRepository) {}
 
   execute() {
-    return this.noticeRepository.findMany({ orderBy: { createdAt: 'desc' } });
+    return this.noticeRepository.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }

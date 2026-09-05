@@ -6,18 +6,21 @@ export type SubjectResource = {
   name: string;
   description: string | null;
   status: RecordStatus;
+  notices?: Array<{ notice: { id: string; title: string } }>;
 };
 
 export type CreateSubjectPayload = {
   name: string;
   description?: string;
   status?: RecordStatus;
+  noticeIds?: string[];
 };
 
 export type UpdateSubjectPayload = {
   name?: string;
   description?: string;
   status?: RecordStatus;
+  noticeIds?: string[];
 };
 
 export const subjectsApi = {

@@ -50,6 +50,7 @@ model Notice {
   status    RecordStatus @default(DRAFT)
   createdAt DateTime     @default(now())
   updatedAt DateTime     @updatedAt
+  subjects  NoticeSubject[]
 }
 
 model Subject {
@@ -60,12 +61,27 @@ model Subject {
   createdAt   DateTime     @default(now())
   updatedAt   DateTime     @updatedAt
   topics      Topic[]
+  notices     NoticeSubject[]
+}
+
+model NoticeSubject {
+  noticeId  String
+  subjectId String
+  notice    Notice  @relation(fields: [noticeId], references: [id], onDelete: Cascade)
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@id([noticeId, subjectId])
+  @@index([subjectId])
 }
 
 model Topic {
   id          String          @id @default(uuid())
   name        String
   description String?
+  contentRichText String?
+  contentPdfUrls  String[]
+  contentVideoUrls String[]
+  contentLinkUrls String[]
   order       Int             @default(0)
   status      RecordStatus    @default(DRAFT)
   createdAt   DateTime        @default(now())

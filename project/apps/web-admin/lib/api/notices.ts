@@ -6,6 +6,7 @@ export type NoticeResource = {
   title: string;
   message: string;
   status: RecordStatus;
+  subjects?: Array<{ subject: { id: string; name: string } }>;
 };
 
 export type CreateNoticePayload = {

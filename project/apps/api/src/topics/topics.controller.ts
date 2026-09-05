@@ -18,6 +18,7 @@ import { updateTopicSchema, type UpdateTopicDto } from './dto/update-topic.dto';
 import { TopicsService } from './topics.service';
 
 const subjectIdQuerySchema = z.uuid();
+const noticeIdQuerySchema = z.uuid();
 
 @Controller('topics')
 @UseGuards(JwtAuthGuard)
@@ -33,12 +34,18 @@ export class TopicsController {
   }
 
   @Get()
-  findAll(@Query('subjectId') subjectId?: string) {
-    if (subjectId) {
-      return this.topicsService.findAll(subjectIdQuerySchema.parse(subjectId));
-    }
+  findAll(
+    @Query('subjectId') subjectId?: string,
+    @Query('noticeId') noticeId?: string,
+  ) {
+    const parsedSubjectId = subjectId
+      ? subjectIdQuerySchema.parse(subjectId)
+      : undefined;
+    const parsedNoticeId = noticeId
+      ? noticeIdQuerySchema.parse(noticeId)
+      : undefined;
 
-    return this.topicsService.findAll();
+    return this.topicsService.findAll(parsedSubjectId, parsedNoticeId);
   }
 
   @Get(':id')

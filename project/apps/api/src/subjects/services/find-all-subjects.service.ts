@@ -6,6 +6,13 @@ export class FindAllSubjectsService {
   constructor(private readonly subjectRepository: SubjectRepository) {}
 
   execute() {
-    return this.subjectRepository.findMany({ orderBy: { createdAt: 'desc' } });
+    return this.subjectRepository.findMany({
+      include: {
+        notices: {
+          include: { notice: true },
+        },
+      },
+      orderBy: { createdAt: 'desc' },
+    });
   }
 }

@@ -99,7 +99,9 @@ describe('Notices CRUD services', () => {
   });
 
   it('throws app error when updating a missing notice', async () => {
-    await expect(updateService.execute('missing', { title: 'Teste' })).rejects.toEqual(
+    await expect(
+      updateService.execute('missing', { title: 'Teste' }),
+    ).rejects.toEqual(
       expect.objectContaining<AppError>({
         message: 'Edital não encontrado.',
         statusCode: HttpStatusCodes.NOT_FOUND,
