@@ -7,12 +7,24 @@ export type QuestionResource = {
   explanation?: string | null;
   status: RecordStatus;
   topics: Array<{ topic: { id: string; name: string } }>;
+  alternatives: Array<{
+    id: string;
+    text: string;
+    order: number;
+    isCorrect: boolean;
+  }>;
 };
 
 export type CreateQuestionPayload = {
   statement: string;
   explanation?: string;
   status?: RecordStatus;
+  difficulty?: "EASY" | "MEDIUM" | "HARD";
+  alternatives?: Array<{
+    text: string;
+    order?: number;
+    isCorrect?: boolean;
+  }>;
   topicIds?: string[];
 };
 
@@ -20,6 +32,13 @@ export type UpdateQuestionPayload = {
   statement?: string;
   explanation?: string;
   status?: RecordStatus;
+  difficulty?: "EASY" | "MEDIUM" | "HARD";
+  alternatives?: Array<{
+    id?: string;
+    text: string;
+    order?: number;
+    isCorrect?: boolean;
+  }>;
   topicIds?: string[];
 };
 

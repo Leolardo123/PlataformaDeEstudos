@@ -16,17 +16,21 @@ export class CreateQuestionService {
         status: createQuestionDto.status,
         alternatives: createQuestionDto.alternatives?.length
           ? {
-              create: createQuestionDto.alternatives.map((alternative, index) => ({
-                text: alternative.text,
-                order: alternative.order ?? index,
-                isCorrect: alternative.isCorrect ?? false,
-              })),
+              create: createQuestionDto.alternatives.map(
+                (alternative, index) => ({
+                  text: alternative.text,
+                  order: alternative.order ?? index,
+                  isCorrect: alternative.isCorrect ?? false,
+                }),
+              ),
             }
           : undefined,
         topics: createQuestionDto.topicIds?.length
           ? {
               createMany: {
-                data: createQuestionDto.topicIds.map((topicId) => ({ topicId })),
+                data: createQuestionDto.topicIds.map((topicId) => ({
+                  topicId,
+                })),
                 skipDuplicates: true,
               },
             }
@@ -34,7 +38,6 @@ export class CreateQuestionService {
       },
       include: {
         alternatives: { orderBy: { order: 'asc' } },
-        topics: { include: { topic: true } },
       },
     });
   }

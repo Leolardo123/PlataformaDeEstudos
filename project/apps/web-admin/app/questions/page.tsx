@@ -12,19 +12,30 @@ import {
 } from "@/lib/api";
 
 type QuestionRow = {
+  alternatives: Array<{
+    id?: string;
+    text: string;
+    order?: number;
+    isCorrect?: boolean;
+  }>;
   id: string;
   statement: string;
   explanation: string;
-  topicId: string;
-  topicLabel: string;
   status: RecordStatus;
+  difficulty?: "EASY" | "MEDIUM" | "HARD";
 };
 
 type FormState = {
   statement: string;
   explanation: string;
-  topicId: string;
+  difficulty?: "EASY" | "MEDIUM" | "HARD";
   status: RecordStatus;
+  alternatives: Array<{
+    id?: string;
+    text: string;
+    order?: number;
+    isCorrect?: boolean;
+  }>;
 };
 
 const statusOptions: Array<{ value: RecordStatus; label: string }> = [
@@ -34,14 +45,11 @@ const statusOptions: Array<{ value: RecordStatus; label: string }> = [
 ];
 
 function toRow(question: QuestionResource): QuestionRow {
-  const firstTopic = question.topics[0]?.topic;
-
   return {
     id: question.id,
     statement: question.statement,
     explanation: question.explanation ?? "",
-    topicId: firstTopic?.id ?? "",
-    topicLabel: firstTopic?.name ?? "Sem tópico",
+    alternatives: question.alternatives ?? [],
     status: question.status,
   };
 }
@@ -55,7 +63,6 @@ function getStatusClass(status: RecordStatus) {
 export default function QuestoesPage() {
   const { accessToken } = useAuth();
   const [rows, setRows] = useState<QuestionRow[]>([]);
-  const [topics, setTopics] = useState<TopicResource[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -65,7 +72,8 @@ export default function QuestoesPage() {
   const [form, setForm] = useState<FormState>({
     statement: "",
     explanation: "",
-    topicId: "",
+    alternatives: [],
+    difficulty: undefined,
     status: "DRAFT",
   });
 
@@ -80,7 +88,6 @@ export default function QuestoesPage() {
     ])
       .then(([questions, topicList]) => {
         setRows(questions.map(toRow));
-        setTopics(topicList);
       })
       .finally(() => setIsLoading(false));
   }, [accessToken]);
@@ -88,7 +95,7 @@ export default function QuestoesPage() {
   const visibleRows = useMemo(() => {
     const normalized = search.toLocaleLowerCase();
     return rows.filter((row) =>
-      `${row.statement} ${row.explanation} ${row.topicLabel}`
+      `${row.statement} ${row.explanation}`
         .toLocaleLowerCase()
         .includes(normalized),
     );
@@ -100,7 +107,8 @@ export default function QuestoesPage() {
     setForm({
       statement: "",
       explanation: "",
-      topicId: topics[0]?.id ?? "",
+      alternatives: [],
+      difficulty: undefined,
       status: "DRAFT",
     });
     setMode("create");
@@ -112,7 +120,8 @@ export default function QuestoesPage() {
     setForm({
       statement: row.statement,
       explanation: row.explanation,
-      topicId: row.topicId,
+      difficulty: row.difficulty,
+      alternatives: row.alternatives,
       status: row.status,
     });
     setMode("update");
@@ -123,6 +132,85 @@ export default function QuestoesPage() {
     setMode("list");
     setEditingId(null);
   }
+
+  const handleQuestionTypeAlternatives = (type: string) => {
+    if (type === "MULTIPLE_CHOICE") {
+      return (
+        <div className="mb-4 grid gap-2.5 rounded-lg border border-(--sidebar-border) bg-(--color-content) p-3.5">
+          <button
+            onClick={() => {
+              setForm((current) => ({
+                ...current,
+                alternatives: [
+                  ...current.alternatives,
+                  {
+                    text: "",
+                    order: current.alternatives.length,
+                    isCorrect: false,
+                  },
+                ],
+              }));
+            }}
+          >
+            Adicionar Alternativa
+          </button>
+          <div className="grid gap-2.5 rounded-lg border border-(--sidebar-border) bg-(--color-content) p-3.5">
+            {form?.alternatives?.map((alternative, index) => (
+              <div key={index} className="flex items-center gap-2.5">
+                <p className="m-0 text-xs font-normal text-(--font-muted)">
+                  Alternativa {index + 1}
+                </p>
+                <input
+                  type="text"
+                  value={alternative.text}
+                  onChange={(e) => {
+                    const newAlternatives = [...form.alternatives];
+                    newAlternatives[index].text = e.target.value;
+                    setForm((current) => ({
+                      ...current,
+                      alternatives: newAlternatives,
+                    }));
+                  }}
+                  placeholder={`Alternativa ${index + 1}`}
+                />
+                <input
+                  type="checkbox"
+                  checked={alternative.isCorrect || false}
+                  onChange={(e) => {
+                    const newAlternatives = [...form.alternatives];
+                    newAlternatives[index].isCorrect = e.target.checked;
+                    setForm((current) => ({
+                      ...current,
+                      alternatives: newAlternatives,
+                    }));
+                  }}
+                />{" "}
+                Correta
+                <button
+                  onClick={() => {
+                    setForm((current) => ({
+                      ...current,
+                      alternatives: current.alternatives.filter(
+                        (_, i) => i !== index,
+                      ),
+                    }));
+                  }}
+                >
+                  Remover
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="mb-4 text-sm text-(--font-muted)">
+        Tipo de questão não suportado.
+      </div>
+    );
+  };
 
   async function submitForm() {
     if (!accessToken) {
@@ -139,7 +227,12 @@ export default function QuestoesPage() {
           statement: form.statement.trim(),
           explanation: form.explanation.trim() || undefined,
           status: form.status,
-          topicIds: form.topicId ? [form.topicId] : undefined,
+          difficulty: form.difficulty,
+          alternatives: form.alternatives.map((alt, index) => ({
+            text: alt.text,
+            order: alt.order ?? index,
+            isCorrect: alt.isCorrect ?? false,
+          })),
         });
         setRows((current) => [toRow(created), ...current]);
       } else if (mode === "update" && editingId) {
@@ -150,7 +243,13 @@ export default function QuestoesPage() {
             statement: form.statement.trim(),
             explanation: form.explanation.trim() || undefined,
             status: form.status,
-            topicIds: form.topicId ? [form.topicId] : undefined,
+            difficulty: form.difficulty,
+            alternatives: form.alternatives.map((alt, index) => ({
+              id: alt.id,
+              text: alt.text,
+              order: alt.order ?? index,
+              isCorrect: alt.isCorrect ?? false,
+            })),
           },
         );
         const next = toRow(updated);
@@ -265,9 +364,6 @@ export default function QuestoesPage() {
                         {row.statement}
                       </td>
                       <td className="border-b border-(--sidebar-border) px-4 py-4 text-[13px] text-foreground">
-                        {row.topicLabel}
-                      </td>
-                      <td className="border-b border-(--sidebar-border) px-4 py-4 text-[13px] text-foreground">
                         <span className={getStatusClass(row.status)}>
                           {statusToLabel(row.status)}
                         </span>
@@ -353,6 +449,54 @@ export default function QuestoesPage() {
 
               <label
                 className="grid gap-1.5 text-sm font-semibold text-foreground"
+                htmlFor="question-type"
+              >
+                Tipo de questão
+                <select
+                  id="question-type"
+                  className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
+                  value={form.alternatives.length > 0 ? "MULTIPLE_CHOICE" : ""}
+                  disabled
+                >
+                  <option value="MULTIPLE_CHOICE">Alternativas</option>
+                </select>
+              </label>
+
+              <label
+                className="grid gap-1.5 text-sm font-semibold text-foreground"
+                htmlFor="question-difficulty"
+              >
+                Dificuldade
+                <p className="m-0 text-xs font-normal text-(--font-muted)">
+                  <select
+                    id="question-difficulty"
+                    className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
+                    value={form.difficulty}
+                    onChange={(event) =>
+                      setForm((current) => ({
+                        ...current,
+                        difficulty: event.target.value as any,
+                      }))
+                    }
+                    disabled={busy}
+                  >
+                    <option value="EASY">Fácil</option>
+                    <option value="MEDIUM">Média</option>
+                    <option value="HARD">Difícil</option>
+                  </select>
+                </p>
+              </label>
+
+              <label
+                className="grid gap-1.5 text-sm font-semibold text-foreground"
+                htmlFor="question-alternatives"
+              >
+                Alternativas
+                {handleQuestionTypeAlternatives("MULTIPLE_CHOICE")}
+              </label>
+
+              <label
+                className="grid gap-1.5 text-sm font-semibold text-foreground"
                 htmlFor="question-explanation"
               >
                 Explicação
@@ -368,32 +512,6 @@ export default function QuestoesPage() {
                   }
                   disabled={busy}
                 />
-              </label>
-
-              <label
-                className="grid gap-1.5 text-sm font-semibold text-foreground"
-                htmlFor="question-topic"
-              >
-                Tópico
-                <select
-                  id="question-topic"
-                  className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
-                  value={form.topicId}
-                  onChange={(event) =>
-                    setForm((current) => ({
-                      ...current,
-                      topicId: event.target.value,
-                    }))
-                  }
-                  disabled={busy}
-                >
-                  <option value="">Selecione...</option>
-                  {topics.map((topic) => (
-                    <option key={topic.id} value={topic.id}>
-                      {topic.name}
-                    </option>
-                  ))}
-                </select>
               </label>
 
               <label

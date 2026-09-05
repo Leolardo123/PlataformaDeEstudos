@@ -6,6 +6,7 @@ import {
 import { z } from 'zod';
 
 export const questionAlternativeSchema = z.object({
+  id: z.string().uuid().optional().describe('ID da alternativa'),
   text: z.string().trim().min(1).max(1000).describe('Texto da alternativa'),
   order: z.number().int().min(0).optional().describe('Ordem da alternativa'),
   isCorrect: z.boolean().optional().describe('Alternativa correta'),
