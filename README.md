@@ -3,9 +3,7 @@
 A proposta principal deste projeto é desenvolver um ecossistema robusto para o gerenciamento de estudos focado em **concurseiros**. 
 
 Para aproximar o projeto de um cenário real, todo o levantamento de requisitos, histórico de decisões e regras de negócio foram baseados em um cliente fictício. Essa documentação completa está centralizada na pasta `docs`, estruturada como um "cofre" do **Obsidian**.
-
 ---
-
 ### 💡 Principais Referências de Produto
 O design das funcionalidades e a experiência do usuário combinam as melhores práticas de plataformas de mercado:
 * **Qconcursos:** Dinâmica de resolução de questões e simulados.
