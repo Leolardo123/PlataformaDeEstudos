@@ -35,14 +35,11 @@ export default function LoginScreen() {
             P
           </div>
           <p className="mb-2 text-sm font-semibold text-[#a955ed]">
-            Painel administrativo
+            Plataforma do Aluno
           </p>
           <h1 className="m-0 text-[28px] font-bold tracking-[-.035em] text-(--foreground)">
             Bem-vindo de volta
           </h1>
-          <p className="mt-2 mb-0 text-sm text-(--font-muted)">
-            Entre para gerenciar os conteúdos da plataforma.
-          </p>
         </div>
 
         <form className="grid gap-5" onSubmit={handleSubmit}>
@@ -75,17 +72,20 @@ export default function LoginScreen() {
             </p>
           )}
           <button
-            className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:bg-[#7e18d4] disabled:opacity-60"
+            className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-tone-2 disabled:opacity-60"
             type="submit"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
           </button>
+          <button
+            className="min-h-11 rounded-lg bg-tone-4 px-4 text-sm font-bold text-white hover:bg-tone-3 disabled:opacity-60"
+            type="button"
+            onClick={() => router.push("/register")}
+          >
+            Cadastrar-se
+          </button>
         </form>
-
-        <p className="mt-6 mb-0 text-center text-xs text-(--font-muted)">
-          Use as credenciais de admin configuradas na API.
-        </p>
       </section>
     </div>
   );
