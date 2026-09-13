@@ -12,15 +12,19 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isLoginRoute = pathname === "/login";
 
+  const publicRoutes = ["/login", "/register"];
+
+  const isPublicRoute = publicRoutes.includes(pathname);
+
   useEffect(() => {
     if (!isReady) return;
-    if (!isAuthenticated && !isLoginRoute) router.replace("/login");
-    if (isAuthenticated && isLoginRoute) router.replace("/dashboard");
+    if (!isAuthenticated && !isPublicRoute) router.replace("/login");
+    if (isAuthenticated && isLoginRoute) router.replace("/home");
   }, [isAuthenticated, isLoginRoute, isReady, router]);
 
   if (
     !isReady ||
-    (!isAuthenticated && !isLoginRoute) ||
+    (!isAuthenticated && !isPublicRoute) ||
     (isAuthenticated && isLoginRoute)
   )
     return null;
@@ -38,7 +42,6 @@ export default function AppShell({ children }: { children: ReactNode }) {
         className="flex min-h-dvh bg-(--color-content) max-sm:block"
         id="top"
       >
-        <Navbar />
         <main
           className="min-w-0 flex-1 p-11 max-sm:min-h-[20dvh] max-sm:p-5"
           aria-label="Conteúdo principal"

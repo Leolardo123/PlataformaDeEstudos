@@ -10,7 +10,7 @@ import AppError from '../AppError.error';
 import {
   formatZodError,
   formatZodIssues,
-} from '../../common/zod-error-formatter';
+} from '../../common/zod/zod-error-formatter';
 
 const isRecord = (value: unknown): value is Record<string, unknown> => {
   return typeof value === 'object' && value !== null;

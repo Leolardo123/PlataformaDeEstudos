@@ -24,7 +24,7 @@ export default function LoginScreen() {
     }
 
     setError("");
-    router.replace("/dashboard");
+    router.replace("/home");
   }
 
   return (
@@ -81,7 +81,7 @@ export default function LoginScreen() {
           <button
             className="min-h-11 rounded-lg bg-tone-4 px-4 text-sm font-bold text-white hover:bg-tone-3 disabled:opacity-60"
             type="button"
-            onClick={() => router.push("/register")}
+            onClick={() => router.replace("/register")}
           >
             Cadastrar-se
           </button>

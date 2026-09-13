@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
 import type { Request } from 'express';
-import { ZodValidationPipe } from '../common/zod-validation.pipe';
+import { ZodValidationPipe } from '../common/zod/zod-validation.pipe';
 import { AuthService } from './auth.service';
 import { loginSchema, type LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
