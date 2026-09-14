@@ -8,6 +8,14 @@ export class FindAllNoticesService {
   execute() {
     return this.noticeRepository.findMany({
       orderBy: { createdAt: 'desc' },
+      include: {
+        subjects: {
+          take: 5,
+          include: {
+            subject: true,
+          },
+        },
+      },
     });
   }
 }
