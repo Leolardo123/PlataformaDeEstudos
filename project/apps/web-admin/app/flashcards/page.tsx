@@ -3,13 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  apiClient,
-  type FlashcardResource,
-  type RecordStatus,
-  statusToLabel,
-  type TopicResource,
-} from "@/lib/api";
+import { apiClient, RecordStatus, statusToLabel } from "@repo/web-api";
+import { FlashcardResource } from "@repo/web-api/src/api/flashcards";
+import { TopicResource } from "@repo/web-api/src/api/topics";
 
 type FlashcardRow = {
   id: string;

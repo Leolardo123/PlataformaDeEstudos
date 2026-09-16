@@ -3,12 +3,8 @@
 import { useEffect, useMemo, useState } from "react";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  apiClient,
-  type NoticeResource,
-  type RecordStatus,
-  statusToLabel,
-} from "@/lib/api";
+import { apiClient, type RecordStatus, statusToLabel } from "@repo/web-api";
+import { NoticeResource } from "@repo/web-api/src/api/notices";
 
 type NoticeRow = {
   id: string;

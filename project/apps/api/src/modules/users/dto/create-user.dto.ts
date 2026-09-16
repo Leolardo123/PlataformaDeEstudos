@@ -7,3 +7,9 @@ export const createUserSchema = z.object({
 });
 
 export type CreateUserDto = z.infer<typeof createUserSchema>;
+
+export const validateUserEmailSchema = z.object({
+  token: z.string().min(1).describe('Token'),
+});
+
+export type ValidateUserEmailDto = z.infer<typeof validateUserEmailSchema>;
