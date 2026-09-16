@@ -5,7 +5,7 @@ export interface ISetCache {
 }
 
 export interface ICacheProvider {
-  get(key: string): Promise<any>;
+  get<T>(key: string): Promise<T>;
   set(options: ISetCache): Promise<void>;
   delete(key: string): Promise<void>;
 }

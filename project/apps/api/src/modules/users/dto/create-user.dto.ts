@@ -1,3 +1,4 @@
+import { Role } from 'generated/prisma/enums';
 import { z } from 'zod';
 
 export const createUserSchema = z.object({
@@ -13,3 +14,12 @@ export const validateUserEmailSchema = z.object({
 });
 
 export type ValidateUserEmailDto = z.infer<typeof validateUserEmailSchema>;
+
+export const resendValidateUserEmailSchema = z.object({
+  email: z.email().describe('Email'),
+  role: z.enum(Object.values(Role)).describe('Tipo de usuário'),
+});
+
+export type ResendValidateUserEmailDto = z.infer<
+  typeof resendValidateUserEmailSchema
+>;

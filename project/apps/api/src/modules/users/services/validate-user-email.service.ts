@@ -8,11 +8,13 @@ import { ValidateInput } from 'src/common/zod/zod-decorator';
 import { type IEmailProvider } from 'src/providers/EmailProvider/interface/EmailProvider.interface';
 import { type ICacheProvider } from 'src/providers/CacheProvider/interface/CacheProvider.interface';
 import AppError from 'src/error/AppError.error';
+import { AuthService } from 'src/auth/auth.service';
 
 @Injectable()
 export class ValidateUserEmailService {
   constructor(
     private readonly userRepository: UserRepository,
+    private readonly authService: AuthService,
     @Inject('EmailProvider')
     private readonly emailProvider: IEmailProvider,
     @Inject('CacheProvider')
@@ -21,7 +23,7 @@ export class ValidateUserEmailService {
 
   @ValidateInput(validateUserEmailSchema)
   async execute({ token }: ValidateUserEmailDto) {
-    const tokenExists = await this.cacheProvider.get(
+    const tokenExists = await this.cacheProvider.get<string | null>(
       `confirmEmailToken:${token}`,
     );
 
@@ -55,9 +57,16 @@ export class ValidateUserEmailService {
       body: 'Seu email foi confirmado com sucesso.',
     });
 
+    const accessToken = this.authService.issueAccessToken(
+      user.id,
+      user.email,
+      user.role,
+    );
+
     return {
       userId,
       emailConfirmed: true,
+      accessToken,
     };
   }
 }

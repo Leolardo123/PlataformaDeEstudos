@@ -12,3 +12,10 @@ export const emailConfig = {
   emailProvider: EMAIL_PROVIDER,
   brevvoApiKey: BREVVO_API_KEY,
 };
+
+const { FRONTEND_STUDENT_URL, FRONTEND_MASTER_URL } = process.env;
+
+export const frontendConfig = {
+  studentUrl: FRONTEND_STUDENT_URL,
+  masterUrl: FRONTEND_MASTER_URL,
+};

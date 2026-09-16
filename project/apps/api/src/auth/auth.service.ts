@@ -13,10 +13,9 @@ export class AuthService {
 
   async login(dto: LoginDto) {
     const user = await this.validateCredentials(dto.email, dto.password);
-    const payload = { sub: user.id, email: user.email, role: user.role };
 
     return {
-      accessToken: await this.jwtService.signAsync(payload),
+      accessToken: await this.issueAccessToken(user.id, user.email, user.role),
       user: {
         id: user.id,
         name: user.name,
@@ -24,6 +23,11 @@ export class AuthService {
         role: user.role,
       },
     };
+  }
+
+  issueAccessToken(userId: string, email: string, role: string) {
+    const payload = { sub: userId, email, role };
+    return this.jwtService.signAsync(payload);
   }
 
   private async validateCredentials(email: string, password: string) {
