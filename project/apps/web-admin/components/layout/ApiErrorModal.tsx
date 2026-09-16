@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { API_ERROR_EVENT, type ApiErrorEventDetail } from '@/lib/api';
+import { useEffect, useState } from "react";
+import { API_ERROR_EVENT, type ApiErrorEventDetail } from "@repo/web-api";
 
 type ModalState = {
   isOpen: boolean;
@@ -26,17 +26,17 @@ export default function ApiErrorModal() {
     };
 
     const onEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setState((current) => ({ ...current, isOpen: false }));
       }
     };
 
     window.addEventListener(API_ERROR_EVENT, onApiError as EventListener);
-    window.addEventListener('keydown', onEscape);
+    window.addEventListener("keydown", onEscape);
 
     return () => {
       window.removeEventListener(API_ERROR_EVENT, onApiError as EventListener);
-      window.removeEventListener('keydown', onEscape);
+      window.removeEventListener("keydown", onEscape);
     };
   }, []);
 
@@ -50,8 +50,11 @@ export default function ApiErrorModal() {
       aria-labelledby="api-error-modal-title"
     >
       <section className="w-full max-w-lg rounded-2xl border border-(--sidebar-border) bg-(--color-sidebar) p-6 shadow-[0_20px_60px_rgba(0,0,0,.35)]">
-        <h2 id="api-error-modal-title" className="m-0 text-xl font-bold text-foreground">
-          Erro {state.detail.status ? `(${state.detail.status})` : ''}
+        <h2
+          id="api-error-modal-title"
+          className="m-0 text-xl font-bold text-foreground"
+        >
+          Erro {state.detail.status ? `(${state.detail.status})` : ""}
         </h2>
         <p className="mt-2 mb-4 text-sm text-(--font-muted)">
           Nao foi possivel concluir a requisicao. Revise os detalhes abaixo.
@@ -66,7 +69,9 @@ export default function ApiErrorModal() {
         <div className="flex justify-end">
           <button
             className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
-            onClick={() => setState((current) => ({ ...current, isOpen: false }))}
+            onClick={() =>
+              setState((current) => ({ ...current, isOpen: false }))
+            }
           >
             Fechar
           </button>

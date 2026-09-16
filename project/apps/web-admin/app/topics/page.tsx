@@ -9,7 +9,7 @@ import {
   statusToLabel,
   type SubjectResource,
   type TopicResource,
-} from "@/lib/api";
+} from "@repo/web-api";
 
 type TopicRow = {
   id: string;

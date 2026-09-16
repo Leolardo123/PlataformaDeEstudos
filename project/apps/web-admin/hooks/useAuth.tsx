@@ -1,7 +1,13 @@
-'use client';
+"use client";
 
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { apiClient, type AuthUser } from '@/lib/api';
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+import { apiClient, type AuthUser } from "@repo/web-api";
 
 type AuthSession = {
   accessToken: string;
@@ -13,11 +19,14 @@ type AuthContextValue = {
   isReady: boolean;
   accessToken: string | null;
   user: AuthUser | null;
-  login: (email: string, password: string) => Promise<{ ok: true } | { ok: false; message: string }>;
+  login: (
+    email: string,
+    password: string,
+  ) => Promise<{ ok: true } | { ok: false; message: string }>;
   logout: () => void;
 };
 
-const SESSION_KEY = 'pde-admin-session';
+const SESSION_KEY = "pde-admin-session";
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -27,7 +36,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     const storedSession = localStorage.getItem(SESSION_KEY);
-    const session = storedSession ? (JSON.parse(storedSession) as AuthSession) : null;
+    const session = storedSession
+      ? (JSON.parse(storedSession) as AuthSession)
+      : null;
 
     if (!session?.accessToken) {
       setIsReady(true);
@@ -52,7 +63,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     if (!email.trim() || !password.trim()) {
-      return { ok: false as const, message: 'Informe e-mail e senha para entrar.' };
+      return {
+        ok: false as const,
+        message: "Informe e-mail e senha para entrar.",
+      };
     }
 
     try {
@@ -64,7 +78,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       return {
         ok: false as const,
-        message: error instanceof Error ? error.message : 'Falha ao autenticar.',
+        message:
+          error instanceof Error ? error.message : "Falha ao autenticar.",
       };
     }
   };
@@ -75,11 +90,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-  return <AuthContext.Provider value={{ isAuthenticated: Boolean(user), isReady, accessToken, user, login, logout }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        isAuthenticated: Boolean(user),
+        isReady,
+        accessToken,
+        user,
+        login,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (!context) throw new Error('useAuth deve ser usado dentro de AuthProvider.');
+  if (!context)
+    throw new Error("useAuth deve ser usado dentro de AuthProvider.");
   return context;
 }

@@ -9,7 +9,7 @@ import {
   type RecordStatus,
   statusToLabel,
   type TopicResource,
-} from "@/lib/api";
+} from "@repo/web-api";
 
 type QuestionRow = {
   alternatives: Array<{
