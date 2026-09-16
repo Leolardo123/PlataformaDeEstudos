@@ -6,17 +6,28 @@ import { useState } from "react";
 export default function RegisterScreen() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const [password, setPassword] = useState("");
 
   async function submitHandler(event: React.FormEvent<HTMLFormElement>) {
+    setLoading(true);
     event.preventDefault();
-    // Handle form submission logic here
 
-    const result = await apiClient.user.register({
-      name: username,
-      email,
-      password,
-    });
+    try {
+      const result = await apiClient.user.register({
+        name: username,
+        email,
+        password,
+      });
+
+      setError("");
+      setLoading(false);
+    } catch (error) {
+      setError(error?.message ?? "Ocorreu um erro ao registrar o usuário.");
+      setLoading(false);
+      return;
+    }
   }
 
   return (
@@ -34,7 +45,7 @@ export default function RegisterScreen() {
               type="text"
               id="username"
               name="username"
-              className="mt-1 block w-full rounded-md border border-(--sidebar-border) bg-(--color-sidebar) p-2 text-(--color-text) shadow-sm focus:border-(--color-primary) focus:ring focus:ring-(--color-primary)/50 sm:text-sm"
+              className="mt-1 block w-full rounded-lg p-2 border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
@@ -51,7 +62,7 @@ export default function RegisterScreen() {
               type="email"
               id="email"
               name="email"
-              className="mt-1 block w-full rounded-md border border-(--sidebar-border) bg-(--color-sidebar) p-2 text-(--color-text) shadow-sm focus:border-(--color-primary) focus:ring focus:ring-(--color-primary)/50 sm:text-sm"
+              className="mt-1 block w-full rounded-lg p-2 border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -68,15 +79,17 @@ export default function RegisterScreen() {
               type="password"
               id="password"
               name="password"
-              className="mt-1 block w-full rounded-md border border-(--sidebar-border) bg-(--color-sidebar) p-2 text-(--color-text) shadow-sm focus:border-(--color-primary) focus:ring focus:ring-(--color-primary)/50 sm:text-sm"
+              className="mt-1 block w-full rounded-lg p-2 border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+          {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
           <button
             type="submit"
-            className="w-full rounded-md bg-(--color-primary) py-2 px-4 text-(--color-text) shadow-sm hover:bg-(--color-primary-hover) focus:outline-none focus:ring-2 focus:ring-(--color-primary) focus:ring-offset-2"
+            className="w-full rounded-md bg-tone-1 py-2 px-4 text-(--color-text) shadow-sm hover:bg-tone-2"
+            disabled={loading}
           >
             Register
           </button>

@@ -8,15 +8,15 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { login } = useAuth();
   const router = useRouter();
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setIsSubmitting(true);
+    setIsLoading(true);
     const result = await login(email, password);
-    setIsSubmitting(false);
+    setIsLoading(false);
 
     if (!result.ok) {
       setError(result.message);
@@ -74,9 +74,9 @@ export default function LoginScreen() {
           <button
             className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-tone-2 disabled:opacity-60"
             type="submit"
-            disabled={isSubmitting}
+            disabled={isLoading}
           >
-            {isSubmitting ? "Entrando..." : "Entrar"}
+            {isLoading ? "Entrando..." : "Entrar"}
           </button>
           <button
             className="min-h-11 rounded-lg bg-tone-4 px-4 text-sm font-bold text-white hover:bg-tone-3 disabled:opacity-60"

@@ -12,7 +12,7 @@ export default function AppShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const isLoginRoute = pathname === "/login";
 
-  const publicRoutes = ["/login", "/register"];
+  const publicRoutes = ["/login", "/register", "/confirm-email"];
 
   const isPublicRoute = publicRoutes.includes(pathname);
 
