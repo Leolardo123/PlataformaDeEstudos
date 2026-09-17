@@ -1,11 +1,10 @@
-import { Home } from "@/components/home/Home";
-import ScreenTransition from "@/components/themeTransition/ScreenTransition";
-import React from "react";
+import Navbar from "@/components/navbar/Navbar";
 
-export default function HomePage() {
+export function Home() {
   return (
-    <ScreenTransition>
-      <Home></Home>
-    </ScreenTransition>
+    <div className="grid min-h-dvh place-items-center bg-(--color-content) p-5">
+      <Navbar />
+      <section className="w-full max-w-[420px] rounded-2xl border border-(--sidebar-border) bg-(--color-sidebar) p-7 shadow-[0_22px_60px_rgba(20,12,28,.14)] sm:p-9"></section>
+    </div>
   );
 }

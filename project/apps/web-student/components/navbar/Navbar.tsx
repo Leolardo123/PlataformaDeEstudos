@@ -12,7 +12,11 @@ export default function Navbar() {
       <h1 className="text-2xl font-bold text-center">Navbar</h1>
       <div>
         {navigation.map((item) => (
-          <a key={item.name} href={item.href} className="mx-2">
+          <a
+            key={item.name}
+            href={item.href}
+            className="mx-2 bg-tone-1 p-2 rounded border-"
+          >
             {item.name}
           </a>
         ))}
