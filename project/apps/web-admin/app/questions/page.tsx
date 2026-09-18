@@ -3,13 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  apiClient,
-  type QuestionResource,
-  type RecordStatus,
-  statusToLabel,
-  type TopicResource,
-} from "@repo/web-api";
+import { apiClient, type RecordStatus, statusToLabel } from "@repo/web-api";
+import { QuestionResource } from "@repo/web-api/src/api/questions";
+import { Button } from "@/components/button/Button";
 
 type QuestionRow = {
   alternatives: Array<{
@@ -137,7 +133,7 @@ export default function QuestoesPage() {
     if (type === "MULTIPLE_CHOICE") {
       return (
         <div className="mb-4 grid gap-2.5 rounded-lg border border-(--sidebar-border) bg-(--color-content) p-3.5">
-          <button
+          <Button
             onClick={() => {
               setForm((current) => ({
                 ...current,
@@ -153,7 +149,7 @@ export default function QuestoesPage() {
             }}
           >
             Adicionar Alternativa
-          </button>
+          </Button>
           <div className="grid gap-2.5 rounded-lg border border-(--sidebar-border) bg-(--color-content) p-3.5">
             {form?.alternatives?.map((alternative, index) => (
               <div key={index} className="flex items-center gap-2.5">
@@ -186,7 +182,7 @@ export default function QuestoesPage() {
                   }}
                 />{" "}
                 Correta
-                <button
+                <Button
                   onClick={() => {
                     setForm((current) => ({
                       ...current,
@@ -197,7 +193,7 @@ export default function QuestoesPage() {
                   }}
                 >
                   Remover
-                </button>
+                </Button>
               </div>
             ))}
           </div>
@@ -312,13 +308,13 @@ export default function QuestoesPage() {
                   Gerencie os cadastros de questões.
                 </p>
               </div>
-              <button
-                className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
+              <Button
+                className="min-h-10.5"
                 onClick={openCreate}
                 disabled={busy || isLoading}
               >
                 + Cadastrar Questão
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -347,9 +343,6 @@ export default function QuestoesPage() {
                       Enunciado
                     </th>
                     <th className="border-b border-(--sidebar-border) bg-(--theme-button) px-4 py-3 text-[11px] font-bold uppercase tracking-[.06em] text-(--font-muted)">
-                      Tópico
-                    </th>
-                    <th className="border-b border-(--sidebar-border) bg-(--theme-button) px-4 py-3 text-[11px] font-bold uppercase tracking-[.06em] text-(--font-muted)">
                       Status
                     </th>
                     <th className="w-44 border-b border-(--sidebar-border) bg-(--theme-button) px-4 py-3 text-[11px] font-bold uppercase tracking-[.06em] text-(--font-muted)">
@@ -369,20 +362,16 @@ export default function QuestoesPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                          onClick={() => openUpdate(row)}
-                          disabled={busy}
-                        >
+                        <Button onClick={() => openUpdate(row)} disabled={busy}>
                           Atualizar
-                        </button>
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
+                        </Button>
+                        <Button
+                          variant="danger"
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
                           Excluir
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}

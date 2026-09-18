@@ -27,7 +27,7 @@ export function Button({
     tertiary:
       "w-fit rounded-md bg-tone-5 py-2 px-4 text-(--color-text) shadow-sm hover:bg-tone-4",
     danger:
-      "w-fit rounded-md bg-red-600 py-2 px-4 text-(--color-text) shadow-sm hover:bg-red-500",
+      "w-fit rounded-md bg-red-700 py-2 px-4 text-(--color-text) shadow-sm hover:bg-red-500",
     warning:
       "w-fit rounded-md bg-yellow-600 py-2 px-4 text-(--color-text) shadow-sm hover:bg-yellow-500",
     info: "w-fit rounded-md bg-blue-600 py-2 px-4 text-(--color-text) shadow-sm hover:bg-blue-500",

@@ -3,6 +3,7 @@
 import { apiClient } from "@repo/web-api";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { Button } from "@/components/button/Button";
 
 export default function ConfirmEmailScreen() {
   const [loading, setLoading] = useState(false);
@@ -68,21 +69,17 @@ export default function ConfirmEmailScreen() {
           className="mt-1 block w-full rounded-lg p-2 border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
         />
         {error && <p className="text-red-500">{error}</p>}
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full rounded-md bg-tone-1 py-2 px-4 text-(--color-text) shadow-sm hover:bg-tone-2"
-        >
+        <Button type="submit" disabled={loading} className="w-full">
           {loading ? "Carregando..." : "Confirmar Email"}
-        </button>
-        <button
+        </Button>
+        <Button
           type="button"
           onClick={resendHandler}
           disabled={loading}
-          className="w-full rounded-md bg-tone-5 py-2 px-4 text-(--color-text) shadow-sm hover:bg-tone-2"
+          className="w-full"
         >
           {loading ? "Carregando..." : "Reenviar Email de Confirmação"}
-        </button>
+        </Button>
       </form>
     </div>
   );

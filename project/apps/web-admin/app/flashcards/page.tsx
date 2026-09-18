@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiClient, RecordStatus, statusToLabel } from "@repo/web-api";
 import { FlashcardResource } from "@repo/web-api/src/api/flashcards";
 import { TopicResource } from "@repo/web-api/src/api/topics";
+import { Button } from "@/components/button/Button";
 
 type FlashcardRow = {
   id: string;
@@ -211,13 +212,9 @@ export default function FlashcardsPage() {
                   Gerencie os cadastros de flashcards.
                 </p>
               </div>
-              <button
-                className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
-                onClick={openCreate}
-                disabled={busy || isLoading}
-              >
+              <Button onClick={openCreate} disabled={busy || isLoading}>
                 + Cadastrar Flashcard
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -271,20 +268,15 @@ export default function FlashcardsPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                          onClick={() => openUpdate(row)}
-                          disabled={busy}
-                        >
+                        <Button onClick={() => openUpdate(row)} disabled={busy}>
                           Atualizar
-                        </button>
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
+                        </Button>
+                        <Button
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
                           Excluir
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -316,14 +308,14 @@ export default function FlashcardsPage() {
                   Preencha os dados e salve para continuar.
                 </p>
               </div>
-              <button
+              <Button
                 type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
+                variant="secondary"
                 onClick={closeForm}
                 disabled={busy}
               >
                 Voltar para listagem
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -421,17 +413,16 @@ export default function FlashcardsPage() {
             </div>
 
             <div className="mt-6 flex justify-end gap-2.5">
-              <button
+              <Button
                 type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
+                variant="danger"
                 onClick={closeForm}
                 disabled={busy}
               >
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 type="button"
-                className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
                 onClick={() => void submitForm()}
                 disabled={busy}
               >
@@ -440,7 +431,7 @@ export default function FlashcardsPage() {
                   : mode === "create"
                     ? "Cadastrar"
                     : "Salvar alterações"}
-              </button>
+              </Button>
             </div>
           </section>
         )}

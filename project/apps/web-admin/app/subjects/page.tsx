@@ -10,6 +10,7 @@ import {
   statusToLabel,
   type SubjectResource,
 } from "@repo/web-api";
+import { Button } from "@/components/button/Button";
 
 type SubjectRow = {
   id: string;
@@ -210,13 +211,13 @@ export default function MateriasPage() {
                   Gerencie os cadastros de matérias.
                 </p>
               </div>
-              <button
-                className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
+              <Button
+                className="min-h-10.5"
                 onClick={openCreate}
                 disabled={busy || isLoading}
               >
                 + Cadastrar Matéria
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -270,20 +271,16 @@ export default function MateriasPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                          onClick={() => openUpdate(row)}
-                          disabled={busy}
-                        >
+                        <Button onClick={() => openUpdate(row)} disabled={busy}>
                           Atualizar
-                        </button>
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
+                        </Button>
+                        <Button
+                          variant="danger"
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
                           Excluir
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -315,14 +312,9 @@ export default function MateriasPage() {
                   Preencha os dados e salve para continuar.
                 </p>
               </div>
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
-                onClick={closeForm}
-                disabled={busy}
-              >
+              <Button className="min-h-10" onClick={closeForm} disabled={busy}>
                 Voltar para listagem
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -420,17 +412,11 @@ export default function MateriasPage() {
             </div>
 
             <div className="mt-6 flex justify-end gap-2.5">
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
-                onClick={closeForm}
-                disabled={busy}
-              >
+              <button className="min-h-10" onClick={closeForm} disabled={busy}>
                 Cancelar
               </button>
               <button
-                type="button"
-                className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
+                className="min-h-10"
                 onClick={() => void submitForm()}
                 disabled={busy}
               >

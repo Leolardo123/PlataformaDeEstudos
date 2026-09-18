@@ -10,6 +10,7 @@ import {
   type SubjectResource,
   type TopicResource,
 } from "@repo/web-api";
+import { Button } from "@/components/button/Button";
 
 type TopicRow = {
   id: string;
@@ -365,13 +366,13 @@ export default function TopicosPage() {
                   Gerencie os cadastros de tópicos.
                 </p>
               </div>
-              <button
-                className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
+              <Button
+                className="min-h-10.5 disabled:opacity-60"
                 onClick={openCreate}
                 disabled={busy || isLoading}
               >
                 + Cadastrar Tópico
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -425,20 +426,16 @@ export default function TopicosPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                          onClick={() => openUpdate(row)}
-                          disabled={busy}
-                        >
+                        <Button onClick={() => openUpdate(row)} disabled={busy}>
                           Atualizar
-                        </button>
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
+                        </Button>
+                        <Button
+                          variant="danger"
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
                           Excluir
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}
@@ -468,35 +465,32 @@ export default function TopicosPage() {
                   Preencha os dados e salve para continuar.
                 </p>
               </div>
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
+              <Button
+                className="min-h-10 disabled:opacity-60"
                 onClick={closeForm}
                 disabled={busy}
               >
                 Voltar para listagem
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
 
             <div className="mb-5 flex flex-wrap gap-2">
-              <button
-                type="button"
-                className={`min-h-9 rounded-lg border px-3 text-sm font-semibold ${activeTab === "Dados Gerais" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
+              <Button
+                className={`min-h-9 disabled:opacity-60 ${activeTab === "Dados Gerais" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
                 onClick={() => setActiveTab("Dados Gerais")}
                 disabled={busy}
               >
                 Dados Gerais
-              </button>
-              <button
-                type="button"
-                className={`min-h-9 rounded-lg border px-3 text-sm font-semibold ${activeTab === "Conteúdo" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
+              </Button>
+              <Button
+                className={`min-h-9 disabled:opacity-60 ${activeTab === "Conteúdo" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
                 onClick={() => setActiveTab("Conteúdo")}
                 disabled={busy}
               >
                 Conteúdo
-              </button>
+              </Button>
             </div>
 
             {activeTab === "Dados Gerais" ? (
@@ -677,14 +671,13 @@ export default function TopicosPage() {
                               placeholder="https://..."
                               disabled={busy}
                             />
-                            <button
-                              type="button"
-                              className="min-h-10 rounded-lg border border-[color-mix(in_srgb,#d85a6b_27%,transparent)] bg-[color-mix(in_srgb,#d85a6b_10%,transparent)] px-2.5 text-xs font-semibold text-[#d85a6b]"
+                            <Button
+                              className="min-h-10 disabled:opacity-60"
                               onClick={() => removeTypedUrlItem(index)}
                               disabled={busy || visibleTypedUrls.length <= 1}
                             >
                               Remover
-                            </button>
+                            </Button>
                           </div>
 
                           {trimmedUrl && (

@@ -5,6 +5,7 @@ import ScreenTransition from "@/components/themeTransition/ScreenTransition";
 import { useAuth } from "@/hooks/useAuth";
 import { apiClient, type RecordStatus, statusToLabel } from "@repo/web-api";
 import { NoticeResource } from "@repo/web-api/src/api/notices";
+import { Button } from "@/components/button/Button";
 
 type NoticeRow = {
   id: string;
@@ -185,13 +186,13 @@ export default function EditaisPage() {
                   Gerencie os cadastros de editais.
                 </p>
               </div>
-              <button
-                className="min-h-10.5 whitespace-nowrap rounded-lg bg-tone-1 px-4 text-[13px] font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:-translate-y-px hover:bg-[#7e18d4]"
+              <Button
+                className="min-h-10.5"
                 onClick={openCreate}
                 disabled={busy || isLoading}
               >
                 + Cadastrar Edital
-              </button>
+              </Button>
             </div>
 
             {error && <p className="mb-4 text-sm text-[#d85a6b]">{error}</p>}
@@ -245,20 +246,16 @@ export default function EditaisPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#a955ed] hover:underline"
-                          onClick={() => openUpdate(row)}
-                          disabled={busy}
-                        >
+                        <Button onClick={() => openUpdate(row)} disabled={busy}>
                           Atualizar
-                        </button>
-                        <button
-                          className="p-0 text-[13px] font-semibold text-[#d85a6b] hover:underline"
+                        </Button>
+                        <Button
+                          variant="danger"
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
                           Excluir
-                        </button>
+                        </Button>
                       </td>
                     </tr>
                   ))}

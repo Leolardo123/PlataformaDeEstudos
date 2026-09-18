@@ -3,6 +3,7 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import { Button } from "../button/Button";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -74,13 +75,13 @@ export default function LoginScreen() {
               {error}
             </p>
           )}
-          <button
-            className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white shadow-[0_8px_20px_rgba(143,33,237,.22)] hover:bg-[#7e18d4] disabled:opacity-60"
+          <Button
+            className="min-h-11 disabled:opacity-60"
             type="submit"
             disabled={isSubmitting}
           >
             {isSubmitting ? "Entrando..." : "Entrar"}
-          </button>
+          </Button>
         </form>
 
         <p className="mt-6 mb-0 text-center text-xs text-(--font-muted)">

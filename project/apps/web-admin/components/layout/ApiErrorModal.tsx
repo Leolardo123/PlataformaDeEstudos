@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { API_ERROR_EVENT, type ApiErrorEventDetail } from "@repo/web-api";
+import { Button } from "../button/Button";
 
 type ModalState = {
   isOpen: boolean;
@@ -67,14 +68,14 @@ export default function ApiErrorModal() {
         </ul>
 
         <div className="flex justify-end">
-          <button
-            className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
+          <Button
+            className="min-h-10"
             onClick={() =>
               setState((current) => ({ ...current, isOpen: false }))
             }
           >
             Fechar
-          </button>
+          </Button>
         </div>
       </section>
     </div>
