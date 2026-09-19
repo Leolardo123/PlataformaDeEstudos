@@ -7,6 +7,7 @@ import { apiClient, RecordStatus, statusToLabel } from "@repo/web-api";
 import { FlashcardResource } from "@repo/web-api/src/api/flashcards";
 import { TopicResource } from "@repo/web-api/src/api/topics";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
 
 type FlashcardRow = {
   id: string;
@@ -226,7 +227,7 @@ export default function FlashcardsPage() {
               >
                 Buscar
               </label>
-              <input
+              <Input
                 id="flashcard-search"
                 className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none"
                 value={search}
@@ -272,6 +273,7 @@ export default function FlashcardsPage() {
                           Atualizar
                         </Button>
                         <Button
+                          variant="danger"
                           onClick={() => void removeRow(row.id)}
                           disabled={busy}
                         >
@@ -326,9 +328,8 @@ export default function FlashcardsPage() {
                 htmlFor="flashcard-front"
               >
                 Frente
-                <input
+                <Input
                   id="flashcard-front"
-                  className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                   value={form.front}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -346,7 +347,7 @@ export default function FlashcardsPage() {
                 htmlFor="flashcard-back"
               >
                 Verso
-                <textarea
+                <Input
                   id="flashcard-back"
                   className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
                   value={form.back}

@@ -11,6 +11,8 @@ import {
   type SubjectResource,
 } from "@repo/web-api";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
+import Select from "@/components/select/Select";
 
 type SubjectRow = {
   id: string;
@@ -214,7 +216,7 @@ export default function MateriasPage() {
               <Button
                 className="min-h-10.5"
                 onClick={openCreate}
-                disabled={busy || isLoading}
+                isLoading={busy || isLoading}
               >
                 + Cadastrar Matéria
               </Button>
@@ -229,9 +231,8 @@ export default function MateriasPage() {
               >
                 Buscar
               </label>
-              <input
+              <Input
                 id="subject-search"
-                className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Buscar matérias"
@@ -271,13 +272,16 @@ export default function MateriasPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <Button onClick={() => openUpdate(row)} disabled={busy}>
+                        <Button
+                          onClick={() => openUpdate(row)}
+                          isLoading={busy}
+                        >
                           Atualizar
                         </Button>
                         <Button
                           variant="danger"
                           onClick={() => void removeRow(row.id)}
-                          disabled={busy}
+                          isLoading={busy}
                         >
                           Excluir
                         </Button>
@@ -325,9 +329,8 @@ export default function MateriasPage() {
                 htmlFor="subject-name"
               >
                 Nome
-                <input
+                <Input
                   id="subject-name"
-                  className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                   value={form.name}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -345,9 +348,9 @@ export default function MateriasPage() {
                 htmlFor="subject-description"
               >
                 Descrição
-                <textarea
+                <Input
                   id="subject-description"
-                  className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
+                  type="<Input"
                   value={form.description}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -364,10 +367,9 @@ export default function MateriasPage() {
                 htmlFor="subject-notices"
               >
                 Editais vinculados
-                <select
+                <Select
                   id="subject-notices"
                   multiple
-                  className="min-h-28 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
                   value={form.noticeIds}
                   onChange={(event) => {
                     const selected = Array.from(
@@ -382,7 +384,7 @@ export default function MateriasPage() {
                       {notice.title}
                     </option>
                   ))}
-                </select>
+                </Select>
               </label>
 
               <label
@@ -412,20 +414,16 @@ export default function MateriasPage() {
             </div>
 
             <div className="mt-6 flex justify-end gap-2.5">
-              <button className="min-h-10" onClick={closeForm} disabled={busy}>
+              <Button className="min-h-10" onClick={closeForm} isLoading={busy}>
                 Cancelar
-              </button>
-              <button
+              </Button>
+              <Button
                 className="min-h-10"
                 onClick={() => void submitForm()}
-                disabled={busy}
+                isLoading={busy}
               >
-                {busy
-                  ? "Salvando..."
-                  : mode === "create"
-                    ? "Cadastrar"
-                    : "Salvar alterações"}
-              </button>
+                {mode === "create" ? "Cadastrar" : "Salvar alterações"}
+              </Button>
             </div>
           </section>
         )}

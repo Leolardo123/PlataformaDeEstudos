@@ -4,6 +4,7 @@ import { apiClient } from "@repo/web-api";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
 
 export default function ConfirmEmailScreen() {
   const [loading, setLoading] = useState(false);
@@ -61,24 +62,23 @@ export default function ConfirmEmailScreen() {
   return (
     <div className="grid min-h-dvh place-items-center bg-(--color-content) p-5">
       <form onSubmit={submitHandler} className="flex flex-col gap-4">
-        <input
+        <Input
           type="text"
           placeholder="Token de confirmação"
           value={confirmToken}
           onChange={(e) => setConfirmToken(e.target.value)}
-          className="mt-1 block w-full rounded-lg p-2 border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
         />
         {error && <p className="text-red-500">{error}</p>}
-        <Button type="submit" disabled={loading} className="w-full">
-          {loading ? "Carregando..." : "Confirmar Email"}
+        <Button type="submit" isLoading={loading} className="w-full">
+          Confirmar Email
         </Button>
         <Button
           type="button"
           onClick={resendHandler}
-          disabled={loading}
+          isLoading={loading}
           className="w-full"
         >
-          {loading ? "Carregando..." : "Reenviar Email de Confirmação"}
+          Reenviar Email de Confirmação
         </Button>
       </form>
     </div>

@@ -6,6 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiClient, type RecordStatus, statusToLabel } from "@repo/web-api";
 import { NoticeResource } from "@repo/web-api/src/api/notices";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
 
 type NoticeRow = {
   id: string;
@@ -204,7 +205,7 @@ export default function EditaisPage() {
               >
                 Buscar
               </label>
-              <input
+              <Input
                 className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none"
                 id="notice-search"
                 value={search}
@@ -246,13 +247,16 @@ export default function EditaisPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <Button onClick={() => openUpdate(row)} disabled={busy}>
+                        <Button
+                          onClick={() => openUpdate(row)}
+                          isLoading={busy}
+                        >
                           Atualizar
                         </Button>
                         <Button
                           variant="danger"
                           onClick={() => void removeRow(row.id)}
-                          disabled={busy}
+                          isLoading={busy}
                         >
                           Excluir
                         </Button>
@@ -303,7 +307,7 @@ export default function EditaisPage() {
                 htmlFor="notice-title"
               >
                 Título
-                <input
+                <Input
                   id="notice-title"
                   className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                   value={form.title}
@@ -323,9 +327,10 @@ export default function EditaisPage() {
                 htmlFor="notice-message"
               >
                 Mensagem
-                <textarea
+                <Input
                   id="notice-message"
-                  className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
+                  className="min-h-24 w-full"
+                  type="text"
                   value={form.message}
                   onChange={(event) =>
                     setForm((current) => ({

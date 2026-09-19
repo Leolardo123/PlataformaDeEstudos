@@ -11,6 +11,8 @@ import {
   type TopicResource,
 } from "@repo/web-api";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
+import Select from "@/components/select/Select";
 
 type TopicRow = {
   id: string;
@@ -367,7 +369,7 @@ export default function TopicosPage() {
                 </p>
               </div>
               <Button
-                className="min-h-10.5 disabled:opacity-60"
+                className="min-h-10.5 "
                 onClick={openCreate}
                 disabled={busy || isLoading}
               >
@@ -384,9 +386,8 @@ export default function TopicosPage() {
               >
                 Buscar
               </label>
-              <input
+              <Input
                 id="topic-search"
-                className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none"
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 placeholder="Buscar tópicos"
@@ -426,13 +427,16 @@ export default function TopicosPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <Button onClick={() => openUpdate(row)} disabled={busy}>
+                        <Button
+                          onClick={() => openUpdate(row)}
+                          isLoading={busy}
+                        >
                           Atualizar
                         </Button>
                         <Button
                           variant="danger"
                           onClick={() => void removeRow(row.id)}
-                          disabled={busy}
+                          isLoading={busy}
                         >
                           Excluir
                         </Button>
@@ -465,11 +469,7 @@ export default function TopicosPage() {
                   Preencha os dados e salve para continuar.
                 </p>
               </div>
-              <Button
-                className="min-h-10 disabled:opacity-60"
-                onClick={closeForm}
-                disabled={busy}
-              >
+              <Button className="min-h-10 " onClick={closeForm} disabled={busy}>
                 Voltar para listagem
               </Button>
             </div>
@@ -478,16 +478,16 @@ export default function TopicosPage() {
 
             <div className="mb-5 flex flex-wrap gap-2">
               <Button
-                className={`min-h-9 disabled:opacity-60 ${activeTab === "Dados Gerais" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
+                className={`min-h-9  ${activeTab === "Dados Gerais" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
                 onClick={() => setActiveTab("Dados Gerais")}
-                disabled={busy}
+                isLoading={busy}
               >
                 Dados Gerais
               </Button>
               <Button
-                className={`min-h-9 disabled:opacity-60 ${activeTab === "Conteúdo" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
+                className={`min-h-9  ${activeTab === "Conteúdo" ? "border-tone-1 bg-tone-1 text-white" : "border-(--sidebar-border) bg-(--theme-button) text-foreground"}`}
                 onClick={() => setActiveTab("Conteúdo")}
-                disabled={busy}
+                isLoading={busy}
               >
                 Conteúdo
               </Button>
@@ -500,9 +500,8 @@ export default function TopicosPage() {
                   htmlFor="topic-name"
                 >
                   Nome
-                  <input
+                  <Input
                     id="topic-name"
-                    className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                     value={form.name}
                     onChange={(event) =>
                       setForm((current) => ({
@@ -520,9 +519,8 @@ export default function TopicosPage() {
                   htmlFor="topic-description"
                 >
                   Descrição
-                  <textarea
+                  <Input
                     id="topic-description"
-                    className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
                     value={form.description}
                     onChange={(event) =>
                       setForm((current) => ({
@@ -539,9 +537,8 @@ export default function TopicosPage() {
                   htmlFor="topic-subject"
                 >
                   Matéria
-                  <select
+                  <Select
                     id="topic-subject"
-                    className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                     value={form.subjectId}
                     onChange={(event) =>
                       setForm((current) => ({
@@ -557,7 +554,7 @@ export default function TopicosPage() {
                         {subject.name}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </label>
 
                 <label
@@ -565,9 +562,8 @@ export default function TopicosPage() {
                   htmlFor="topic-status"
                 >
                   Status
-                  <select
+                  <Select
                     id="topic-status"
-                    className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                     value={form.status}
                     onChange={(event) =>
                       setForm((current) => ({
@@ -582,7 +578,7 @@ export default function TopicosPage() {
                         {option.label}
                       </option>
                     ))}
-                  </select>
+                  </Select>
                 </label>
               </div>
             ) : (
@@ -600,18 +596,16 @@ export default function TopicosPage() {
                       { label: "• Lista", command: "insertUnorderedList" },
                       { label: "1. Lista", command: "insertOrderedList" },
                     ].map((action) => (
-                      <button
+                      <Button
                         key={action.command}
-                        type="button"
-                        className="min-h-8 rounded-md border border-(--sidebar-border) bg-(--theme-button) px-2.5 text-xs font-semibold text-foreground"
                         onMouseDown={(event) => {
                           event.preventDefault();
                           document.execCommand(action.command);
                         }}
-                        disabled={busy}
+                        isLoading={busy}
                       >
                         {action.label}
-                      </button>
+                      </Button>
                     ))}
                   </div>
                   <div
@@ -647,8 +641,7 @@ export default function TopicosPage() {
                           key={`content-item-${index}`}
                         >
                           <div className="flex gap-2 max-sm:flex-col">
-                            <select
-                              className="min-h-10 min-w-34 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-2.5 text-sm text-foreground"
+                            <Select
                               value={item.type}
                               onChange={(event) =>
                                 updateTypedUrlType(index, event.target.value)
@@ -660,8 +653,8 @@ export default function TopicosPage() {
                                   {option.label}
                                 </option>
                               ))}
-                            </select>
-                            <input
+                            </Select>
+                            <Input
                               className="min-h-10 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                               type="url"
                               value={item.url}
@@ -672,7 +665,7 @@ export default function TopicosPage() {
                               disabled={busy}
                             />
                             <Button
-                              className="min-h-10 disabled:opacity-60"
+                              className="min-h-10 "
                               onClick={() => removeTypedUrlItem(index)}
                               disabled={busy || visibleTypedUrls.length <= 1}
                             >
@@ -724,7 +717,6 @@ export default function TopicosPage() {
                     })}
                   </div>
                   <button
-                    type="button"
                     className="justify-self-start rounded-md border border-(--sidebar-border) bg-(--theme-button) px-3 py-2 text-xs font-semibold text-foreground"
                     onClick={addTypedUrlItem}
                     disabled={busy}
@@ -736,26 +728,16 @@ export default function TopicosPage() {
             )}
 
             <div className="mt-6 flex justify-end gap-2.5">
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
-                onClick={closeForm}
-                disabled={busy}
-              >
+              <Button variant="danger" onClick={closeForm} disabled={busy}>
                 Cancelar
-              </button>
-              <button
-                type="button"
-                className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
-                onClick={() => void submitForm()}
-                disabled={busy}
-              >
+              </Button>
+              <Button onClick={() => void submitForm()} disabled={busy}>
                 {busy
                   ? "Salvando..."
                   : mode === "create"
                     ? "Cadastrar"
                     : "Salvar alterações"}
-              </button>
+              </Button>
             </div>
           </section>
         )}

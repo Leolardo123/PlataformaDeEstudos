@@ -42,7 +42,7 @@ export default function RegisterScreen() {
             >
               Nome de Usuário
             </label>
-            <input
+            <Input
               type="text"
               id="username"
               name="username"
@@ -59,7 +59,7 @@ export default function RegisterScreen() {
             >
               Email
             </label>
-            <input
+            <Input
               type="email"
               id="email"
               name="email"
@@ -76,7 +76,7 @@ export default function RegisterScreen() {
             >
               Senha
             </label>
-            <input
+            <Input
               type="password"
               id="password"
               name="password"
@@ -88,7 +88,7 @@ export default function RegisterScreen() {
           </div>
           {error && <div className="mb-4 text-sm text-red-600">{error}</div>}
           <div className="flex flex-col gap-4">
-            <Button type="submit" disabled={loading}>
+            <Button type="submit" isLoading={loading}>
               Register
             </Button>
             <Button onClick={() => window.history.back()} variant="secondary">

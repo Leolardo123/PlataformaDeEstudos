@@ -3,6 +3,8 @@
 import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
+import Input from "@/components/input/Input";
+import { Button } from "@/components/button/Button";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
@@ -29,7 +31,7 @@ export default function LoginScreen() {
 
   return (
     <div className="grid min-h-dvh place-items-center bg-(--color-content) p-5">
-      <section className="w-full max-w-[420px] rounded-2xl border border-(--sidebar-border) bg-(--color-sidebar) p-7 shadow-[0_22px_60px_rgba(20,12,28,.14)] sm:p-9">
+      <section className="w-full max-w-105 rounded-2xl border border-(--sidebar-border) bg-(--color-sidebar) p-7 shadow-[0_22px_60px_rgba(20,12,28,.14)] sm:p-9">
         <div className="mb-8">
           <div className="mb-6 grid size-10 place-items-center rounded-xl bg-tone-1 text-xl font-extrabold text-white shadow-[0_8px_20px_rgba(143,33,237,.28)]">
             P
@@ -37,26 +39,24 @@ export default function LoginScreen() {
           <p className="mb-2 text-sm font-semibold text-[#a955ed]">
             Plataforma do Aluno
           </p>
-          <h1 className="m-0 text-[28px] font-bold tracking-[-.035em] text-(--foreground)">
+          <h1 className="m-0 text-[28px] font-bold tracking-[-.035em] text-foreground">
             Bem-vindo de volta
           </h1>
         </div>
 
         <form className="grid gap-5" onSubmit={handleSubmit}>
-          <label className="grid gap-2 text-[13px] font-semibold text-(--foreground)">
+          <label className="grid gap-2 text-[13px] font-semibold text-foreground">
             E-mail
-            <input
-              className="min-h-11 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
+            <Input
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
               autoComplete="email"
             />
           </label>
-          <label className="grid gap-2 text-[13px] font-semibold text-(--foreground)">
+          <label className="grid gap-2 text-[13px] font-semibold text-foreground">
             Senha
-            <input
-              className="min-h-11 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
+            <Input
               type="password"
               value={password}
               onChange={(event) => setPassword(event.target.value)}
@@ -71,20 +71,17 @@ export default function LoginScreen() {
               {error}
             </p>
           )}
-          <button
-            className="min-h-11 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-tone-2 disabled:opacity-60"
-            type="submit"
-            disabled={isLoading}
-          >
-            {isLoading ? "Entrando..." : "Entrar"}
-          </button>
-          <button
-            className="min-h-11 rounded-lg bg-tone-4 px-4 text-sm font-bold text-white hover:bg-tone-3 disabled:opacity-60"
+          <Button className="w-full" type="submit" isLoading={isLoading}>
+            Entrar
+          </Button>
+          <Button
+            variant="secondary"
+            className="w-full"
             type="button"
             onClick={() => router.replace("/register")}
           >
             Cadastrar-se
-          </button>
+          </Button>
         </form>
       </section>
     </div>

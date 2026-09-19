@@ -49,7 +49,7 @@ export default function LoginScreen() {
         <form className="grid gap-5" onSubmit={handleSubmit}>
           <label className="grid gap-2 text-[13px] font-semibold text-(--foreground)">
             E-mail
-            <input
+            <Input
               className="min-h-11 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
               type="email"
               value={email}
@@ -59,7 +59,7 @@ export default function LoginScreen() {
           </label>
           <label className="grid gap-2 text-[13px] font-semibold text-(--foreground)">
             Senha
-            <input
+            <Input
               className="min-h-11 rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-(--foreground) outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
               type="password"
               value={password}
@@ -75,11 +75,7 @@ export default function LoginScreen() {
               {error}
             </p>
           )}
-          <Button
-            className="min-h-11 disabled:opacity-60"
-            type="submit"
-            disabled={isSubmitting}
-          >
+          <Button className="min-h-11 " type="submit" disabled={isSubmitting}>
             {isSubmitting ? "Entrando..." : "Entrar"}
           </Button>
         </form>

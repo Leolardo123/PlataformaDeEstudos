@@ -12,7 +12,7 @@ export type CrudFormField = {
   label: string;
   type?:
     | "text"
-    | "textarea"
+    | "<Input"
     | "select"
     | "number"
     | "richtext"
@@ -387,7 +387,7 @@ export function CrudTable<T extends { id: string }>({
           >
             Buscar
           </label>
-          <input
+          <Input
             className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
             id="table-search"
             value={search}
@@ -403,7 +403,7 @@ export function CrudTable<T extends { id: string }>({
           <thead>
             <tr>
               <th className="w-11 border-b border-(--sidebar-border) bg-(--theme-button) py-3.25 pr-0 pl-4 text-center text-[11px] font-bold uppercase tracking-[.06em] text-(--font-muted)">
-                <input
+                <Input
                   className="size-3.75 cursor-pointer accent-tone-1"
                   type="checkbox"
                   checked={allVisibleSelected}
@@ -428,7 +428,7 @@ export function CrudTable<T extends { id: string }>({
             {visibleRows.map((row) => (
               <tr className="hover:bg-(--nav-hover)" key={row.id}>
                 <td className="w-11 border-b border-(--sidebar-border) py-4 pr-0 pl-4 text-center last:border-0">
-                  <input
+                  <Input
                     className="size-3.75 cursor-pointer accent-tone-1"
                     type="checkbox"
                     checked={selectedIds.has(row.id)}
@@ -520,7 +520,7 @@ export function CrudTable<T extends { id: string }>({
                 const value = formValues[field.name] ?? "";
                 const id = `crud-form-${field.name}`;
 
-                if (field.type === "textarea") {
+                if (field.type === "<Input") {
                   return (
                     <label
                       className="grid gap-1.5 text-sm font-semibold text-foreground"
@@ -528,7 +528,7 @@ export function CrudTable<T extends { id: string }>({
                       htmlFor={id}
                     >
                       {field.label}
-                      <textarea
+                      <<Input
                         id={id}
                         className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
                         value={value}
@@ -616,7 +616,7 @@ export function CrudTable<T extends { id: string }>({
                               key={`${field.name}-${index}`}
                             >
                               <div className="flex gap-2">
-                                <input
+                                <Input
                                   id={`${id}-${index}`}
                                   className="min-h-10 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
                                   type="url"
@@ -755,7 +755,7 @@ export function CrudTable<T extends { id: string }>({
                                     </option>
                                   ))}
                                 </select>
-                                <input
+                                <Input
                                   id={`${id}-${index}`}
                                   className="min-h-10 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
                                   type="url"
@@ -906,7 +906,7 @@ export function CrudTable<T extends { id: string }>({
                     htmlFor={id}
                   >
                     {field.label}
-                    <input
+                    <Input
                       id={id}
                       className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground outline-none focus:border-tone-1 focus:shadow-[0_0_0_3px_rgba(143,33,237,.15)]"
                       type={field.type === "number" ? "number" : "text"}

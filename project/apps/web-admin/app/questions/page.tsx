@@ -6,6 +6,8 @@ import { useAuth } from "@/hooks/useAuth";
 import { apiClient, type RecordStatus, statusToLabel } from "@repo/web-api";
 import { QuestionResource } from "@repo/web-api/src/api/questions";
 import { Button } from "@/components/button/Button";
+import Input from "@/components/input/Input";
+import Select from "@/components/select/Select";
 
 type QuestionRow = {
   alternatives: Array<{
@@ -156,7 +158,7 @@ export default function QuestoesPage() {
                 <p className="m-0 text-xs font-normal text-(--font-muted)">
                   Alternativa {index + 1}
                 </p>
-                <input
+                <Input
                   type="text"
                   value={alternative.text}
                   onChange={(e) => {
@@ -169,7 +171,7 @@ export default function QuestoesPage() {
                   }}
                   placeholder={`Alternativa ${index + 1}`}
                 />
-                <input
+                <Input
                   type="checkbox"
                   checked={alternative.isCorrect || false}
                   onChange={(e) => {
@@ -326,7 +328,7 @@ export default function QuestoesPage() {
               >
                 Buscar
               </label>
-              <input
+              <Input
                 id="question-search"
                 className="min-h-9.25 w-full rounded-md border border-(--sidebar-border) bg-(--color-content) px-2.5 text-[13px] text-foreground outline-none"
                 value={search}
@@ -362,13 +364,16 @@ export default function QuestoesPage() {
                         </span>
                       </td>
                       <td className="flex gap-4 whitespace-nowrap border-b border-(--sidebar-border) px-4 py-4">
-                        <Button onClick={() => openUpdate(row)} disabled={busy}>
+                        <Button
+                          onClick={() => openUpdate(row)}
+                          isLoading={busy}
+                        >
                           Atualizar
                         </Button>
                         <Button
                           variant="danger"
                           onClick={() => void removeRow(row.id)}
-                          disabled={busy}
+                          isLoading={busy}
                         >
                           Excluir
                         </Button>
@@ -404,7 +409,6 @@ export default function QuestoesPage() {
                 </p>
               </div>
               <button
-                type="button"
                 className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
                 onClick={closeForm}
                 disabled={busy}
@@ -421,7 +425,7 @@ export default function QuestoesPage() {
                 htmlFor="question-statement"
               >
                 Enunciado
-                <input
+                <Input
                   id="question-statement"
                   className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                   value={form.statement}
@@ -457,9 +461,8 @@ export default function QuestoesPage() {
               >
                 Dificuldade
                 <p className="m-0 text-xs font-normal text-(--font-muted)">
-                  <select
+                  <Select
                     id="question-difficulty"
-                    className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                     value={form.difficulty}
                     onChange={(event) =>
                       setForm((current) => ({
@@ -472,7 +475,7 @@ export default function QuestoesPage() {
                     <option value="EASY">Fácil</option>
                     <option value="MEDIUM">Média</option>
                     <option value="HARD">Difícil</option>
-                  </select>
+                  </Select>
                 </p>
               </label>
 
@@ -489,9 +492,9 @@ export default function QuestoesPage() {
                 htmlFor="question-explanation"
               >
                 Explicação
-                <textarea
+                <Input
                   id="question-explanation"
-                  className="min-h-24 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 py-2 text-sm text-foreground"
+                  type="text"
                   value={form.explanation}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -508,9 +511,8 @@ export default function QuestoesPage() {
                 htmlFor="question-status"
               >
                 Status
-                <select
+                <Select
                   id="question-status"
-                  className="min-h-11 w-full rounded-lg border border-(--sidebar-border) bg-(--color-content) px-3 text-sm text-foreground"
                   value={form.status}
                   onChange={(event) =>
                     setForm((current) => ({
@@ -525,31 +527,17 @@ export default function QuestoesPage() {
                       {option.label}
                     </option>
                   ))}
-                </select>
+                </Select>
               </label>
             </div>
 
             <div className="mt-6 flex justify-end gap-2.5">
-              <button
-                type="button"
-                className="min-h-10 rounded-lg border border-(--sidebar-border) bg-(--theme-button) px-4 text-sm font-semibold text-foreground"
-                onClick={closeForm}
-                disabled={busy}
-              >
+              <Button variant="danger" onClick={closeForm} isLoading={busy}>
                 Cancelar
-              </button>
-              <button
-                type="button"
-                className="min-h-10 rounded-lg bg-tone-1 px-4 text-sm font-bold text-white hover:bg-[#7e18d4]"
-                onClick={() => void submitForm()}
-                disabled={busy}
-              >
-                {busy
-                  ? "Salvando..."
-                  : mode === "create"
-                    ? "Cadastrar"
-                    : "Salvar alterações"}
-              </button>
+              </Button>
+              <Button onClick={() => void submitForm()} isLoading={busy}>
+                {mode === "create" ? "Cadastrar" : "Salvar alterações"}
+              </Button>
             </div>
           </section>
         )}
