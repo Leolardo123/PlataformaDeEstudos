@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "../button/Button";
+import Input from "../input/Input";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
