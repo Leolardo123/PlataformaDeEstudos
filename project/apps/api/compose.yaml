@@ -33,6 +33,8 @@ services:
       - '${GRAFANA_PORT}:3000'
     depends_on:
       - postgres
+    networks:
+      - app-network
 
 volumes:
   postgres_data:
