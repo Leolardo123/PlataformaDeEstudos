@@ -26,6 +26,14 @@ services:
     networks:
       - app-network
 
+  grafana:
+    image: grafana/grafana-oss:latest
+    container_name: local_grafana
+    ports:
+      - '8090:3000'
+    depends_on:
+      - postgres_db
+
 volumes:
   postgres_data:
   redis_data:
