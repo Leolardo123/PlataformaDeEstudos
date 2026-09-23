@@ -14,32 +14,42 @@ services:
     networks:
       - app-network
 
-  redis:
-    image: redis:7.4-alpine
-    container_name: redis_cache
-    restart: unless-stopped
-    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
-    ports:
-      - '${REDIS_PORT}:6379'
-    volumes:
-      - redis_data:/data
-    networks:
-      - app-network
-
   grafana:
     image: grafana/grafana-oss:latest
-    container_name: grafana_local
+    container_name: local_grafana
     ports:
-      - '${GRAFANA_PORT}:3000'
+      - '8090:3000'
     depends_on:
       - postgres
+      - loki
     networks:
       - app-network
 
-volumes:
-  postgres_data:
-  redis_data:
+  loki:
+    image: grafana/loki:latest
+    container_name: loki_local
+    ports:
+      - '3100:3100'
+    command: -config.file=/etc/loki/local-config.yaml
+    networks:
+      - app-network
+
+  promtail:
+    image: grafana/promtail:latest
+    container_name: promtail_local
+    volumes:
+      - ./promtail-config.yml:/etc/promtail/config.yml
+      # Format: ./path/to/nestjs/logs:/var/log/nestjs
+      - ./logs:/var/log/nestjs
+    command: -config.file=/etc/promtail/config.yml
+    networks:
+      - app-network
+    depends_on:
+      - loki
 
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  postgres_data:
