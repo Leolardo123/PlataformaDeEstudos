@@ -8,7 +8,7 @@ services:
       POSTGRES_PASSWORD: ${DB_PASSWORD}
       POSTGRES_DB: ${DB_NAME}
     ports:
-      - '5432:${DB_PORT}'
+      - '${DB_PORT}:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     networks:
@@ -28,11 +28,11 @@ services:
 
   grafana:
     image: grafana/grafana-oss:latest
-    container_name: local_grafana
+    container_name: grafana_local
     ports:
-      - '8090:3000'
+      - '${GRAFANA_PORT}:3000'
     depends_on:
-      - postgres_db
+      - postgres
 
 volumes:
   postgres_data:
